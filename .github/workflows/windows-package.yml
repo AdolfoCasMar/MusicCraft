@@ -33,4 +33,7 @@ jobs:
         shell: pwsh
         env:
           GH_PACKAGE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: dotnet nuget push 'package-out/*.nupkg' --source 'https://nuget.pkg.github.com/AdolfoCasMar/index.json' --api-key "$env:GH_PACKAGE_TOKEN" --skip-duplicate
+        run: |
+          $package = Get-ChildItem package-out -Filter '*.nupkg' | Select-Object -First 1
+          if (-not $package) { throw 'No se encontró el paquete generado.' }
+          dotnet nuget push $package.FullName --source 'https://nuget.pkg.github.com/AdolfoCasMar/index.json' --api-key "$env:GH_PACKAGE_TOKEN" --skip-duplicate
