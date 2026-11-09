@@ -1,0 +1,9 @@
+/target/
+*.exe
+*.pdb
+*.log
+.env
+.env.*
+WebView2/
+layout.json
+playlists.json
