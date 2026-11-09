@@ -4,11 +4,15 @@
 
 MusicCraft es un reproductor experimental para Windows, inspirado en los reproductores clásicos como Winamp. Combina una interfaz con ventanas acoplables, música local y reproducción de YouTube en una aplicación de escritorio escrita en Rust.
 
-> **Estado:** prototipo en desarrollo. La aplicación todavía muestra el nombre BraveAmp en su interfaz y ejecutable; MusicCraft es el nombre elegido para el proyecto. No está afiliada a ArtCraft, Winamp, Brave ni YouTube.
+> **Estado:** prototipo en desarrollo. No está afiliada a ArtCraft, Winamp, Brave ni YouTube.
 
 ## Descargar
 
-La versión experimental para Windows x64 está disponible en [Releases](../../releases). Descarga y descomprime `MusicCraft-0.8.0-windows-x64.zip` y abre `BraveAmp.exe`. Requiere Windows y Microsoft Edge WebView2 Runtime.
+### Windows x64
+
+[**Descargar MusicCraft.exe**](https://github.com/AdolfoCasMar/MusicCraft/releases/download/v0.8.1/MusicCraft.exe) · [Descargar ZIP con licencias y documentación](https://github.com/AdolfoCasMar/MusicCraft/releases/download/v0.8.1/MusicCraft-0.8.1-windows-x64.zip) · [Todas las versiones](https://github.com/AdolfoCasMar/MusicCraft/releases)
+
+La versión es experimental y requiere Windows de 64 bits y Microsoft Edge WebView2 Runtime.
 
 Linux y macOS todavía no son compatibles: la adaptación de ventanas, navegador y filtrado está pendiente. Los paquetes para estos sistemas aún no están disponibles.
 
@@ -23,7 +27,7 @@ Linux y macOS todavía no son compatibles: la adaptación de ventanas, navegador
 
 ## Capturas
 
-Imágenes de pruebas de versiones de desarrollo: la interfaz todavía usa el nombre anterior, BraveAmp, y algunos controles pueden diferir de la versión actual.
+Imágenes de pruebas anteriores al cambio de nombre: muestran BraveAmp y algunos controles pueden diferir de la versión actual.
 
 | Reproductor | Ecualizador |
 | --- | --- |
@@ -41,7 +45,7 @@ Se necesita Windows, el entorno de desarrollo de Rust, las herramientas de compi
 cargo build --release
 ```
 
-El ejecutable se genera en `target/release/braveamp-rust.exe`. Para ejecutar las pruebas:
+El ejecutable se genera en `target/release/musiccraft.exe`. Para ejecutar las pruebas:
 
 ```powershell
 cargo test

@@ -15,7 +15,7 @@ fn main() {
         .status();
     match compiled {
         Ok(status) if status.success() => println!(
-            "cargo:rustc-link-arg-bin=braveamp-rust={}",
+            "cargo:rustc-link-arg-bin=musiccraft={}",
             output.display()
         ),
         _ => println!(

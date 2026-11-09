@@ -140,20 +140,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "braveamp-rust"
-version = "0.8.0"
-dependencies = [
- "adblock",
- "serde",
- "serde_json",
- "tao",
- "url",
- "webview2-com",
- "windows",
- "wry",
-]
-
-[[package]]
 name = "bytes"
 version = "1.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1192,6 +1178,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "488016bfae457b036d996092f6cb448677611ce4449e970ceaf42695203f218a"
 dependencies = [
  "autocfg",
+]
+
+[[package]]
+name = "musiccraft"
+version = "0.8.1"
+dependencies = [
+ "adblock",
+ "serde",
+ "serde_json",
+ "tao",
+ "url",
+ "webview2-com",
+ "windows",
+ "wry",
 ]
 
 [[package]]

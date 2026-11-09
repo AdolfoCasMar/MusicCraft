@@ -72,7 +72,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             Some(panels["player"].window.hwnd())
         };
         let builder = WindowBuilder::new()
-            .with_title(format!("BraveAmp - {name}"))
+            .with_title(format!("MusicCraft - {name}"))
             .with_decorations(false)
             .with_resizable(true)
             .with_min_inner_size(LogicalSize::new(
@@ -154,7 +154,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         browserviews.push(view);
     }
-    let mut state = json!({"title":"BRAVEAMP · RUST","status":"LISTO","notice":"Busca música en YouTube.","time":0,"duration":0,"playing":false,"volume":70,"shuffle":false,"repeat":false,"currentIndex":-1,"queue":[],"results":[],"searchStatus":"Busca canciones o playlists en YouTube.","capabilities":{"playback":true,"search":true,"playlist":true,"equalizer":true},"eqStatus":"Ecualizador para YouTube y archivos locales.","eq":{"enabled":false,"preamp":0,"bands":[0,0,0,0,0,0,0,0,0]}});
+    let mut state = json!({"title":"MUSICCRAFT · RUST","status":"LISTO","notice":"Busca música en YouTube.","time":0,"duration":0,"playing":false,"volume":70,"shuffle":false,"repeat":false,"currentIndex":-1,"queue":[],"results":[],"searchStatus":"Busca canciones o playlists en YouTube.","capabilities":{"playback":true,"search":true,"playlist":true,"equalizer":true},"eqStatus":"Ecualizador para YouTube y archivos locales.","eq":{"enabled":false,"preamp":0,"bands":[0,0,0,0,0,0,0,0,0]}});
     let mut queue: Vec<Value> = Vec::new();
     let mut results: Vec<Value> = Vec::new();
     let mut current: Option<usize> = None;

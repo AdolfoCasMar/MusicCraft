@@ -2,11 +2,11 @@
   const $ = id => document.getElementById(id);
   const panel = ['player','equalizer','playlist','library'].includes(window.BRAVEAMP_PANEL) ? window.BRAVEAMP_PANEL : new URLSearchParams(location.search).get('panel') || 'player';
   (document.getElementById(panel) || $('player')).hidden = false;
-  const state = {title:'BRAVEAMP · YOUTUBE',time:0,duration:0,playing:false,volume:70,queue:[],results:[],currentIndex:-1,shuffle:false,repeat:false,capabilities:{playback:false,search:false,playlist:false,equalizer:false},eq:{enabled:false,preamp:0,bands:Array(9).fill(0)}};
+  const state = {title:'MUSICCRAFT · YOUTUBE',time:0,duration:0,playing:false,volume:70,queue:[],results:[],currentIndex:-1,shuffle:false,repeat:false,capabilities:{playback:false,search:false,playlist:false,equalizer:false},eq:{enabled:false,preamp:0,bands:Array(9).fill(0)}};
   const frequencies = ['PRE','60','170','310','600','1K','3K','6K','12K','16K'];
   const send = (command,args={}) => {
     if (window.ipc?.postMessage) window.ipc.postMessage(JSON.stringify({command,...args}));
-    else console.info('[BraveAmp]',command,args);
+    else console.info('[MusicCraft]',command,args);
   };
   // The title bar and equalizer graph both provide room to move the window.
   // Sliders, buttons and search fields keep their normal interaction.
@@ -50,7 +50,7 @@
   window.initializeBraveAmpLibrary(panel,$,send,state);
   let titleValue='';
   function title(text){
-    text=String(text || 'BRAVEAMP · YOUTUBE'); if(text===titleValue) return; titleValue=text;
+    text=String(text || 'MUSICCRAFT · YOUTUBE'); if(text===titleValue) return; titleValue=text;
     $('title-text').textContent=text; $('title').title=text; $('title').setAttribute('aria-label',text); requestAnimationFrame(measureTitle);
   }
   function measureTitle(){
