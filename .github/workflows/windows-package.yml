@@ -1,0 +1,36 @@
+name: Publicar paquete Windows
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packaging/MusicCraft.Windows.csproj'
+      - '.github/workflows/windows-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  package:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - name: Obtener y verificar el ejecutable publicado
+        shell: pwsh
+        run: |
+          $url = 'https://github.com/AdolfoCasMar/MusicCraft/releases/download/v0.8.1/MusicCraft.exe'
+          Invoke-WebRequest -Uri $url -OutFile packaging/MusicCraft.exe
+          $hash = (Get-FileHash packaging/MusicCraft.exe -Algorithm SHA256).Hash.ToLower()
+          if ($hash -ne '70a9c35565235de3863ea7bc7bf4f1177bf895c0988abaafbdef589929d07b93') { throw 'El ejecutable no coincide con la versión verificada.' }
+      - name: Crear paquete NuGet
+        run: dotnet pack packaging/MusicCraft.Windows.csproj --configuration Release --output package-out
+      - name: Publicar en GitHub Packages
+        shell: pwsh
+        env:
+          GH_PACKAGE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: dotnet nuget push 'package-out/*.nupkg' --source 'https://nuget.pkg.github.com/AdolfoCasMar/index.json' --api-key "$env:GH_PACKAGE_TOKEN" --skip-duplicate

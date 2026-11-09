@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <PackageId>MusicCraft.Windows</PackageId>
+    <Version>0.8.1-preview.1</Version>
+    <Authors>MusicCraft contributors</Authors>
+    <Description>Paquete experimental con el ejecutable de MusicCraft para Windows x64. Para descargarlo directamente, consulta la página de versiones.</Description>
+    <PackageProjectUrl>https://github.com/AdolfoCasMar/MusicCraft</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AdolfoCasMar/MusicCraft</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="MusicCraft.exe" Pack="true" PackagePath="tools/" />
+    <None Include="../LICENSE-MIT;../LICENSE-APACHE;../LICENCIA-ADBLOCK.txt" Pack="true" PackagePath="licenses/" />
+    <None Include="../browser/filters/*" Pack="true" PackagePath="licenses/filters/" />
+  </ItemGroup>
+</Project>
