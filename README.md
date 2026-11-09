@@ -6,6 +6,12 @@ MusicCraft es un reproductor experimental para Windows, inspirado en los reprodu
 
 > **Estado:** prototipo en desarrollo. La aplicación todavía muestra el nombre BraveAmp en su interfaz y ejecutable; MusicCraft es el nombre elegido para el proyecto. No está afiliada a ArtCraft, Winamp, Brave ni YouTube.
 
+## Descargar
+
+La versión experimental para Windows x64 está disponible en [Releases](../../releases). Descarga y descomprime `MusicCraft-0.8.0-windows-x64.zip` y abre `BraveAmp.exe`. Requiere Windows y Microsoft Edge WebView2 Runtime.
+
+Linux y macOS todavía no son compatibles: la adaptación de ventanas, navegador y filtrado está pendiente. Los paquetes para estos sistemas aún no están disponibles.
+
 ## Funciones
 
 - Ventanas para el reproductor, el ecualizador, la cola y la biblioteca, que se pueden mover, acoplar y plegar.
