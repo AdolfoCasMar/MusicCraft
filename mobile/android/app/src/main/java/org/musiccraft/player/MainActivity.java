@@ -59,6 +59,11 @@ public class MainActivity extends Activity {
         handler.post(() -> { if (!destroyed) player.evaluateJavascript("window.musiccraftMediaAction&&window.musiccraftMediaAction(" + JSONObject.quote(action) + ")", null); });
     }
 
+    void mediaSeek(long milliseconds) {
+        final double seconds=Math.max(0,milliseconds)/1000.0;
+        handler.post(() -> { if (!destroyed) player.evaluateJavascript("window.musiccraftMediaSeek&&window.musiccraftMediaSeek(" + seconds + ")", null); });
+    }
+
     private void showYoutube(boolean show) {
         showingYoutube = show;
         view.setImportantForAccessibility(show && !consentIsSearch ? View.IMPORTANT_FOR_ACCESSIBILITY_AUTO : View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
@@ -136,11 +141,11 @@ public class MainActivity extends Activity {
                 if (input.length() != 9) return;
                 for (int i=0; i<9; i++) { double n=input.getDouble(i); if(!Double.isFinite(n))return; bands.put(Math.max(-12, Math.min(12, n))); }
                 String script = "(()=>{try{const v=document.querySelector('video');if(!v)return 'esperando';let g=window.__musiccraftEq;" +
-                    "if(!g){if(!" + enabled + ")return 'desactivado';window.__musiccraftEq=g={context:new AudioContext(),video:null};}" +
+                    "if(!g){window.__musiccraftEq=g={context:new AudioContext(),video:null};}" +
                     "if(g.video!==v){const src=v.currentSrc||'';if(!src.startsWith('blob:'+location.origin+'/'))return src?'incompatible':'esperando';" +
                     "if(g.output)try{g.output.disconnect()}catch(_){};const source=g.context.createMediaElementSource(v);g.preamp=g.context.createGain();source.connect(g.preamp);let node=g.preamp;g.filters=[];" +
                     "[60,170,310,600,1000,3000,6000,12000,16000].forEach((hz,i)=>{let f=g.context.createBiquadFilter();f.type=i===0?'lowshelf':i===8?'highshelf':'peaking';f.frequency.value=hz;f.Q.value=1;node.connect(f);node=f;g.filters.push(f)});" +
-                    "node.connect(g.context.destination);g.output=node;g.video=v;}" +
+                    "g.analyser=g.context.createAnalyser();g.analyser.fftSize=1024;g.analyser.smoothingTimeConstant=.7;node.connect(g.analyser);g.analyser.connect(g.context.destination);g.output=g.analyser;g.video=v;}" +
                     "g.preamp.gain.setTargetAtTime(" + enabled + "?Math.pow(10," + pre + "/20):1,g.context.currentTime,.02);const gains=" + bands + ";g.filters.forEach((f,i)=>f.gain.setTargetAtTime(" + enabled + "?gains[i]:0,g.context.currentTime,.02));g.context.resume().catch(()=>{});return " + enabled + "?(g.context.state==='running'?'activo':'esperando'):'desactivado';}catch(_){return 'error'}})()";
                 handler.post(() -> view.evaluateJavascript(script, result -> {
                     try { Object status = new JSONTokener(result).nextValue(); if(status instanceof String) player.evaluateJavascript("window.musiccraftEqState&&window.musiccraftEqState(" + JSONObject.quote((String)status) + ")",null); } catch(Exception ignored) {}
@@ -157,6 +162,19 @@ public class MainActivity extends Activity {
             }
             handler.post(() -> { autoStartAllowed = value.equals("play"); view.evaluateJavascript("(()=>{" + action + "})()", null); });
         }
+    }
+
+    private void pollSpectrum() {
+        if (destroyed) return;
+        if (youtubeSelected && !activityInBackground) {
+            int generation=navigationGeneration;
+            String script="(()=>{const g=window.__musiccraftEq,v=document.querySelector('video');if(!g?.analyser||!v||v.paused||v.ended)return null;const a=g.analyser,d=new Uint8Array(a.frequencyBinCount);a.getByteFrequencyData(d);const values=[];for(let i=0;i<15;i++){let low=Math.floor(50*Math.pow(320,i/15)*a.fftSize/g.context.sampleRate),high=Math.ceil(50*Math.pow(320,(i+1)/15)*a.fftSize/g.context.sampleRate);let max=0;for(let j=Math.max(0,low);j<Math.min(d.length,Math.max(low+1,high));j++)max=Math.max(max,d[j]);values.push(max)}return JSON.stringify(values)})()";
+            view.evaluateJavascript(script, value -> {
+                if (generation!=navigationGeneration||!youtubeSelected||value==null||"null".equals(value)) return;
+                try { Object raw=new JSONTokener(value).nextValue(); if(raw instanceof String) { JSONArray bands=new JSONArray((String)raw); if(bands.length()==15)player.evaluateJavascript("window.musiccraftSpectrum&&window.musiccraftSpectrum("+bands+")",null); } } catch(Exception ignored) {}
+            });
+        }
+        handler.postDelayed(this::pollSpectrum, 150);
     }
 
     private void pollYoutube() {
@@ -320,6 +338,7 @@ public class MainActivity extends Activity {
         showYoutube(false); setContentView(root);
         player.loadUrl("file:///android_asset/index.html");
         pollYoutube();
+        pollSpectrum();
     }
 
     @Override protected void onActivityResult(int request, int result, Intent data) {

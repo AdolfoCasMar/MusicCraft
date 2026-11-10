@@ -10,6 +10,8 @@ Incluye un adaptador experimental del motor Rust `adblock-rust` y de una instant
 
 La aplicación utiliza un servicio de reproducción y una sesión multimedia de Android para continuar en segundo plano y mostrar controles en las notificaciones. Se ha probado al salir de la aplicación y al apagar la pantalla en un Android virtual, tanto con música local como con reproducción online; es necesario comprobar el comportamiento y los controles en cada teléfono. Cerrar MusicCraft explícitamente o detener su proceso termina la reproducción. Algunos sistemas pueden restringir la ejecución en segundo plano.
 
+La versión 0.7 incorpora un visualizador de frecuencias reales para archivos locales y fuentes online compatibles, y admite las solicitudes de desplazamiento de la sesión multimedia. La presentación y el gesto de la barra en notificaciones y pantalla de bloqueo deben verificarse en cada dispositivo.
+
 El prototipo usa Java para la ventana y JavaScript/Web Audio para la interfaz y audio; el filtrado usa Rust. No es una versión publicada.
 
 Requiere Android 8.0 o posterior con procesador ARM de 64 bits o x86-64. La selección de archivos utiliza el selector del sistema; no pide acceso general a los archivos.

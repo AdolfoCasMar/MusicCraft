@@ -52,6 +52,11 @@ public final class PlaybackService extends Service {
             @Override public void onPause() { send("pause"); }
             @Override public void onSkipToNext() { send("next"); }
             @Override public void onSkipToPrevious() { send("previous"); }
+            @Override public void onSeekTo(long pos) {
+                long target=Math.max(0,duration>0?Math.min(pos,duration):pos);
+                MainActivity current=activity.get();
+                if(current!=null) { position=target; updateSession(); current.mediaSeek(target); }
+            }
             @Override public void onStop() { send("stop"); stopSelf(); }
         });
         session.setActive(true);
@@ -76,7 +81,7 @@ public final class PlaybackService extends Service {
     }
     private void updateSession() {
         session.setMetadata(new MediaMetadata.Builder().putString(MediaMetadata.METADATA_KEY_TITLE,title).putLong(MediaMetadata.METADATA_KEY_DURATION,duration).build());
-        long actions=PlaybackState.ACTION_PLAY|PlaybackState.ACTION_PAUSE|PlaybackState.ACTION_PLAY_PAUSE|PlaybackState.ACTION_SKIP_TO_NEXT|PlaybackState.ACTION_SKIP_TO_PREVIOUS|PlaybackState.ACTION_STOP;
+        long actions=PlaybackState.ACTION_PLAY|PlaybackState.ACTION_PAUSE|PlaybackState.ACTION_PLAY_PAUSE|PlaybackState.ACTION_SKIP_TO_NEXT|PlaybackState.ACTION_SKIP_TO_PREVIOUS|PlaybackState.ACTION_STOP|PlaybackState.ACTION_SEEK_TO;
         session.setPlaybackState(new PlaybackState.Builder().setActions(actions).setState(playing?PlaybackState.STATE_PLAYING:PlaybackState.STATE_PAUSED,position,playing?1f:0f).build());
     }
     private void update(String name, boolean isPlaying, double seconds, double total) {

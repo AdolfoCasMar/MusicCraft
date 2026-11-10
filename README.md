@@ -16,9 +16,9 @@ La versión es experimental y requiere Windows de 64 bits y Microsoft Edge WebVi
 
 ### Android (prueba)
 
-[**Descargar MusicCraft para Android 0.6**](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-Android-0.6-preview.apk) · [Código e instrucciones](mobile/android/README.md)
+[**Descargar MusicCraft para Android 0.7**](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-Android-0.7-preview.apk) · [Código e instrucciones](mobile/android/README.md)
 
-APK experimental para Android 8 o posterior, firmado con una clave local de prueba. Incluye el icono de MusicCraft, música local, búsqueda y reproducción online, ecualizador y controles multimedia. La reproducción en segundo plano se ha probado en un dispositivo virtual; debe comprobarse en cada teléfono. El filtrado de anuncios no está garantizado. Las actualizaciones requieren una firma compatible con la instalación anterior.
+APK experimental para Android 8 o posterior, firmado con una clave local de prueba. Incluye el icono de MusicCraft, música local, búsqueda y reproducción online, ecualizador, visualizador de espectro y controles multimedia con desplazamiento. El visualizador online depende de la compatibilidad de la fuente. Los nuevos controles de posición de Android deben probarse en un teléfono real. El filtrado de anuncios no está garantizado. Las actualizaciones requieren una firma compatible con la instalación anterior.
 
 ### iPhone (en desarrollo)
 
