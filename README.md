@@ -22,7 +22,7 @@ APK experimental para Android 8 o posterior, firmado con una clave local de prue
 
 ### iPhone (en desarrollo)
 
-La [base de iOS](mobile/ios/README.md) aún no es una aplicación instalable: la música online y el filtrado están pendientes. GitHub Actions intenta compilarla para el simulador de iOS. Esa compilación no está firmada y no se puede instalar en un iPhone; para ello se necesita configurar la firma y la distribución con Apple.
+La [base de iOS](mobile/ios/README.md) aún es incompleta: la música online y el filtrado están pendientes. GitHub Actions intenta compilar versiones para el simulador y para iPhone. El archivo IPA de prueba no está firmado; es necesario firmarlo con una cuenta de Apple antes de instalarlo. Por ejemplo, AltStore Classic puede realizar la firma para pruebas personales desde Windows; no se ha probado MusicCraft con este método.
 
 Linux y macOS todavía no son compatibles: la adaptación de ventanas, navegador y filtrado está pendiente. Los paquetes para estos sistemas aún no están disponibles.
 

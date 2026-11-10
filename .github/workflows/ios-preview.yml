@@ -20,9 +20,23 @@ jobs:
       - name: Build for iOS Simulator
         working-directory: mobile/ios
         run: xcodebuild -project MusicCraft.xcodeproj -scheme MusicCraft -configuration Debug -sdk iphonesimulator -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
+      - name: Build unsigned application for iPhone
+        working-directory: mobile/ios
+        run: |
+          xcodebuild -project MusicCraft.xcodeproj -scheme MusicCraft -configuration Debug -sdk iphoneos -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
+          mkdir -p package/Payload
+          cp -R build/Build/Products/Debug-iphoneos/MusicCraft.app package/Payload/
+          cd package
+          zip -qry ../MusicCraft-unsigned.ipa Payload
       - name: Upload simulator application
         uses: actions/upload-artifact@v4
         with:
           name: MusicCraft-iOS-simulator
           path: mobile/ios/build/Build/Products/Debug-iphonesimulator/MusicCraft.app
+          if-no-files-found: error
+      - name: Upload unsigned iPhone IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: MusicCraft-iOS-unsigned-preview
+          path: mobile/ios/MusicCraft-unsigned.ipa
           if-no-files-found: error
