@@ -1,0 +1,28 @@
+name: iOS simulator preview
+on:
+  push:
+    paths:
+      - 'mobile/ios/**'
+      - '.github/workflows/ios-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate project
+        working-directory: mobile/ios
+        run: xcodegen generate
+      - name: Build for iOS Simulator
+        working-directory: mobile/ios
+        run: xcodebuild -project MusicCraft.xcodeproj -scheme MusicCraft -configuration Debug -sdk iphonesimulator -derivedDataPath build CODE_SIGNING_ALLOWED=NO build
+      - name: Upload simulator application
+        uses: actions/upload-artifact@v4
+        with:
+          name: MusicCraft-iOS-simulator
+          path: mobile/ios/build/Build/Products/Debug-iphonesimulator/MusicCraft.app
+          if-no-files-found: error

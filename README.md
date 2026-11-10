@@ -14,6 +14,16 @@ MusicCraft es un reproductor experimental para Windows, inspirado en los reprodu
 
 La versión es experimental y requiere Windows de 64 bits y Microsoft Edge WebView2 Runtime.
 
+### Android (prueba)
+
+[**Descargar MusicCraft para Android 0.6**](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-Android-0.6-preview.apk) · [Código e instrucciones](mobile/android/README.md)
+
+APK experimental para Android 8 o posterior, firmado con una clave local de prueba. Incluye el icono de MusicCraft, música local, búsqueda y reproducción online, ecualizador y controles multimedia. La reproducción en segundo plano se ha probado en un dispositivo virtual; debe comprobarse en cada teléfono. El filtrado de anuncios no está garantizado. Las actualizaciones requieren una firma compatible con la instalación anterior.
+
+### iPhone (en desarrollo)
+
+La [base de iOS](mobile/ios/README.md) aún no es una aplicación instalable: la música online y el filtrado están pendientes. GitHub Actions intenta compilarla para el simulador de iOS. Esa compilación no está firmada y no se puede instalar en un iPhone; para ello se necesita configurar la firma y la distribución con Apple.
+
 Linux y macOS todavía no son compatibles: la adaptación de ventanas, navegador y filtrado está pendiente. Los paquetes para estos sistemas aún no están disponibles.
 
 ## Funciones

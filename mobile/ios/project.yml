@@ -1,0 +1,23 @@
+name: MusicCraft
+options:
+  bundleIdPrefix: org.musiccraft
+  deploymentTarget:
+    iOS: "15.0"
+targets:
+  MusicCraft:
+    type: application
+    platform: iOS
+    sources:
+      - path: MusicCraft
+        excludes: [Web, Info.plist]
+      - path: MusicCraft/Web
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.musiccraft.player.ios
+        PRODUCT_NAME: MusicCraft
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        SWIFT_VERSION: "5.0"
+        INFOPLIST_FILE: MusicCraft/Info.plist
+        TARGETED_DEVICE_FAMILY: "1,2"
