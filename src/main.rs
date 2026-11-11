@@ -288,7 +288,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
    Event::WindowEvent{window_id,event:WindowEvent::Resized(size),..}=>{
     #[cfg(target_os = "linux")]
     if let Some(panel)=panels.values().find(|p|p.window.id()==window_id) {
-     let _=panel.webview.set_bounds(Rect{position:tao::dpi::PhysicalPosition::new(0,0).into(),size:(*size).into()});
+     let _=panel.webview.set_bounds(Rect{position:tao::dpi::PhysicalPosition::new(0,0).into(),size:size.into()});
     }
     if panels["playlist"].window.id()==window_id {let scale=panels["playlist"].window.scale_factor();let logical=size.to_logical::<f64>(scale);for web in &browserviews {let _=web.set_bounds(Rect{position:LogicalPosition::new(0.0,20.0).into(),size:LogicalSize::new(logical.width,(logical.height-20.0).max(1.0)).into()});}}
     if std::time::Instant::now()>=scaling_until {if let Some((name,_))=panels.iter().find(|(_,p)|p.window.id()==window_id){pending_arrange=Some((std::time::Instant::now()+std::time::Duration::from_millis(220),name.clone()));}}
