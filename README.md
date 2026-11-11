@@ -15,9 +15,12 @@ MusicCraft es un reproductor gratuito y experimental inspirado en Winamp. Reúne
 | Android | Versión experimental firmada; Android 8 o superior, ARM64 o x86-64. | [Descargar APK 0.13](https://github.com/AdolfoCasMar/MusicCraft/releases/download/android-v0.13/MusicCraft-Android-0.13.apk) |
 | Windows | Versión experimental para Windows de 64 bits; necesita Microsoft Edge WebView2 Runtime. | [Descargar versión 0.8.2](https://github.com/AdolfoCasMar/MusicCraft/releases/download/windows-v0.8.2/MusicCraft-Windows-0.8.2.exe) |
 | iPhone | Prototipo inicial, sin búsqueda online ni filtrado; requiere firma para instalarlo. | [Consultar el proyecto iOS](mobile/ios/README.md) |
-| Linux y macOS | Adaptación pendiente; todavía no existen versiones funcionales. | — |
+| Linux | Prueba temprana para x86-64; requiere GTK 3, WebKitGTK 4.1 y X11 o XWayland. | [Descargas experimentales](https://github.com/AdolfoCasMar/MusicCraft/releases/tag/desktop-v0.8.2-alpha.1) |
+| macOS | Prueba temprana para Apple Silicon; aplicación sin firmar. | [Descargas experimentales](https://github.com/AdolfoCasMar/MusicCraft/releases/tag/desktop-v0.8.2-alpha.1) |
 
 [Ver todas las versiones](https://github.com/AdolfoCasMar/MusicCraft/releases).
+
+Las versiones de Linux y macOS todavía no son equivalentes a la de Windows: el filtrado de peticiones de red no está integrado y puede aparecer publicidad. Linux se ha comprobado arrancando en un entorno virtual; macOS se ha compilado, pero no se ha probado su funcionamiento en un Mac. La reproducción y las ventanas necesitan más pruebas en ambos sistemas.
 
 **Actualización de Android:** el APK 0.13 tiene una firma distinta de las versiones de prueba anteriores. Puede ser necesario desinstalar la anterior, lo que puede borrar sus ajustes y playlists. Android o el fabricante pueden mostrar avisos al instalar aplicaciones de fuera de una tienda.
 
@@ -48,7 +51,7 @@ Para abrir música local, MusicCraft usa el selector de archivos de Android y ac
 
 ## Desarrollo
 
-El escritorio actual usa Rust, Tao y WebView2 en Windows. La versión Android utiliza Java, JavaScript/Web Audio y el motor de filtrado en Rust. Consulta [Android](mobile/android/README.md) y [iOS](mobile/ios/README.md) para instrucciones y limitaciones. Para compilar Windows se necesitan Rust, herramientas C++ de Visual Studio y Microsoft Edge WebView2 Runtime:
+El escritorio usa Rust y Tao, con WebView2 en Windows y WebKit en las pruebas de Linux y macOS. La versión Android utiliza Java, JavaScript/Web Audio y el motor de filtrado en Rust. Consulta [Android](mobile/android/README.md) y [iOS](mobile/ios/README.md) para instrucciones y limitaciones. Para compilar Windows se necesitan Rust, herramientas C++ de Visual Studio y Microsoft Edge WebView2 Runtime:
 
 ```powershell
 cargo build --release

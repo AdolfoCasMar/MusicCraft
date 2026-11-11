@@ -1,7 +1,7 @@
 name: Publish tested desktop alpha
 on:
   push:
-    branches: [desktop-cross-platform]
+    branches: [main]
     paths: ['.github/workflows/publish-tested-desktop-alpha.yml']
   workflow_dispatch:
 permissions:
