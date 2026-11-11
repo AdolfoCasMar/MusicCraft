@@ -1,8 +1,9 @@
 (() => {
   const $ = id => document.getElementById(id);
+  const cleanTitle = value => String(value || '').replace(/\bYouTube(?:\s+Music)?\b/gi,'').replace(/\s*[-–|·]\s*$/,'').trim() || 'MÚSICA';
   const panel = ['player','equalizer','playlist','library'].includes(window.BRAVEAMP_PANEL) ? window.BRAVEAMP_PANEL : new URLSearchParams(location.search).get('panel') || 'player';
   (document.getElementById(panel) || $('player')).hidden = false;
-  const state = {title:'MUSICCRAFT · YOUTUBE',time:0,duration:0,playing:false,volume:70,queue:[],results:[],currentIndex:-1,shuffle:false,repeat:false,capabilities:{playback:false,search:false,playlist:false,equalizer:false},eq:{enabled:false,preamp:0,bands:Array(9).fill(0)}};
+  const state = {title:'MUSICCRAFT',time:0,duration:0,playing:false,volume:70,queue:[],results:[],currentIndex:-1,shuffle:false,repeat:false,capabilities:{playback:false,search:false,playlist:false,equalizer:false},eq:{enabled:false,preamp:0,bands:Array(9).fill(0)}};
   const frequencies = ['PRE','60','170','310','600','1K','3K','6K','12K','16K'];
   const send = (command,args={}) => {
     if (window.ipc?.postMessage) window.ipc.postMessage(JSON.stringify({command,...args}));
@@ -50,7 +51,7 @@
   window.initializeBraveAmpLibrary(panel,$,send,state);
   let titleValue='';
   function title(text){
-    text=String(text || 'MUSICCRAFT · YOUTUBE'); if(text===titleValue) return; titleValue=text;
+    text=cleanTitle(text || 'MUSICCRAFT'); if(text===titleValue) return; titleValue=text;
     $('title-text').textContent=text; $('title').title=text; $('title').setAttribute('aria-label',text); requestAnimationFrame(measureTitle);
   }
   function measureTitle(){
@@ -67,7 +68,7 @@
     const queue=$('queue');queue.replaceChildren();
     state.queue.forEach((item,index)=>{
       const li=document.createElement('li'), play=document.createElement('button'), remove=document.createElement('button');
-      const name=typeof item==='string'?item:item.title || 'Sin título';
+      const name=cleanTitle(typeof item==='string'?item:item.title || 'Sin título');
       li.classList.toggle('active',index===state.currentIndex);play.textContent=`${String(index+1).padStart(2,'0')}. ${name}`;play.title=name;
       play.disabled=!state.capabilities.playlist;play.onclick=()=>send('play_queue',{index});
       remove.textContent='×';remove.title=`Quitar ${name}`;remove.disabled=!state.capabilities.playlist;remove.onclick=()=>send('remove_queue',{index});li.append(play,remove);queue.append(li);
@@ -78,7 +79,7 @@
     const results=$('results');results.replaceChildren();
     state.results.forEach((item,index)=>{
       const li=document.createElement('li'),name=document.createElement('span'),play=document.createElement('button'),add=document.createElement('button');
-      name.className='result-title';name.textContent=item.title || 'Sin título';li.append(name);
+      name.className='result-title';name.textContent=cleanTitle(item.title || 'Sin título');li.append(name);
       if(item.kind!=='playlists'){play.textContent='▶';play.title='Reproducir';play.disabled=!state.capabilities.playlist;play.onclick=()=>send('play_result',{index});li.append(play);}
       add.textContent=item.kind==='playlists'?'+ LISTA':'+ COLA';add.disabled=!state.capabilities.playlist;add.onclick=()=>send('add_result',{index});li.append(add);results.append(li);
     });
@@ -97,7 +98,7 @@
   }
   function render(){
     title(state.title);$('time').textContent=clock(state.time);$('status').textContent=state.status || (state.playing?'REPRODUCIENDO':'EN PAUSA');
-    $('notice').textContent=state.notice || 'Preparado para reproducir YouTube.';document.body.classList.toggle('playing',!!state.playing);
+    $('notice').textContent=state.notice || 'Preparado para reproducir música.';document.body.classList.toggle('playing',!!state.playing);
     for(const id of ['prev','play','pause','stop','next','volume','shuffle','repeat']) $(id).disabled=!state.capabilities.playback;
     $('seek').disabled=!state.capabilities.playback || !state.duration;
     if(document.activeElement!==$('seek')){$('seek').max=Math.max(1,Number(state.duration)||0);$('seek').value=Number(state.time)||0;}
@@ -106,7 +107,7 @@
     $('search-button').disabled=!state.capabilities.search;$('query').disabled=!state.capabilities.search;
     $('add-form').querySelectorAll('input,button').forEach(e=>e.disabled=!state.capabilities.playlist);
     $('clear').disabled=!state.capabilities.playlist;
-    $('search-status').textContent=state.searchStatus || (state.capabilities.search?'Busca música en YouTube.':'Búsqueda pendiente de integración.');
+    $('search-status').textContent=state.searchStatus || (state.capabilities.search?'Busca música online.':'Búsqueda pendiente de integración.');
     renderQueue();renderResults();renderEq();
     if(panel==='library' && Array.isArray(state.savedPlaylists)) {const el=$('saved-lists'),old=el.value;el.replaceChildren();state.savedPlaylists.forEach(name=>{const option=document.createElement('option');option.textContent=name;option.value=name;el.append(option)});if(state.savedPlaylists.includes(old))el.value=old;}
 

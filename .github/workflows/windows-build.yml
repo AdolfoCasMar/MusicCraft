@@ -1,0 +1,36 @@
+name: Build Windows desktop
+on:
+  push:
+    branches: [main]
+    paths: ['src/**', 'ui/**', 'browser/**', 'Cargo.*', '.github/workflows/windows-build.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Run tests
+        run: cargo test --locked
+      - name: Build application
+        run: cargo build --release --locked
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MusicCraft-Windows-x64
+          path: target/release/musiccraft.exe
+          if-no-files-found: error
+      - name: Publish Windows preview
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if (gh release view windows-v0.8.2 2>$null) {
+            Write-Host 'Release already exists; leaving its files unchanged.'
+          } else {
+            Copy-Item target/release/musiccraft.exe MusicCraft-Windows-0.8.2.exe
+            gh release create windows-v0.8.2 MusicCraft-Windows-0.8.2.exe --target "$env:GITHUB_SHA" --prerelease --title 'MusicCraft Windows 0.8.2 (preview)' --notes 'Experimental Windows x64 build. The classic panels and docking are retained. The interface now uses neutral labels for online playback. Requires Microsoft Edge WebView2 Runtime. Online playback and filtering depend on the source.'
+            if ($LASTEXITCODE -ne 0) { throw 'Could not publish Windows release.' }
+          }

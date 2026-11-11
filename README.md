@@ -1,79 +1,62 @@
 # MusicCraft
 
-<p align="center"><img src="assets/musiccraft-icon-propuesta.png" width="160" alt="Propuesta de icono: zorro con auriculares"></p>
+<p align="center"><img src="assets/musiccraft-icon-propuesta.png" width="170" alt="MusicCraft: zorro con auriculares"></p>
 
-MusicCraft es un reproductor experimental gratuito para Windows y Android, inspirado en los reproductores clásicos como Winamp. Permite escuchar música local y buscar contenido de YouTube desde una interfaz clásica.
+<p align="center"><strong>Tu música, con el aspecto clásico de los reproductores de siempre.</strong></p>
 
-> **Estado:** prototipo en desarrollo. No está afiliada a ArtCraft, Winamp, Brave ni YouTube.
+MusicCraft es un reproductor gratuito y experimental inspirado en Winamp. Reúne música local, búsqueda de canciones y listas online, ecualizador y cola de reproducción en una interfaz clásica. El proyecto no incorpora publicidad propia.
 
-## Descargar
+> MusicCraft es independiente; no está afiliado a Winamp, ArtCraft, Brave ni YouTube. La reproducción online utiliza YouTube. El filtrado está basado en componentes y reglas de Brave, pero no integra el navegador Brave completo ni garantiza bloquear todos los anuncios.
 
-### Windows x64
+## Descargas
 
-[**Descargar MusicCraft.exe**](https://github.com/AdolfoCasMar/MusicCraft/releases/download/v0.8.1/MusicCraft.exe) · [Descargar ZIP con licencias y documentación](https://github.com/AdolfoCasMar/MusicCraft/releases/download/v0.8.1/MusicCraft-0.8.1-windows-x64.zip) · [Todas las versiones](https://github.com/AdolfoCasMar/MusicCraft/releases)
+| Plataforma | Estado | Descarga |
+| --- | --- | --- |
+| Android | Versión experimental firmada; Android 8 o superior, ARM64 o x86-64. | [Descargar APK 0.13](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-Android-0.13.apk) |
+| Windows | Versión experimental para Windows de 64 bits; necesita Microsoft Edge WebView2 Runtime. | [Descargar versión 0.8.1](https://github.com/AdolfoCasMar/MusicCraft/releases/download/v0.8.1/MusicCraft.exe) |
+| iPhone | Prototipo inicial, sin búsqueda online ni filtrado; requiere firma para instalarlo. | [Consultar el proyecto iOS](mobile/ios/README.md) |
+| Linux y macOS | Adaptación pendiente; todavía no existen versiones funcionales. | — |
 
-La versión es experimental y requiere Windows de 64 bits y Microsoft Edge WebView2 Runtime.
+La versión publicada de Windows puede diferir de los cambios más recientes del código. [Ver todas las versiones](https://github.com/AdolfoCasMar/MusicCraft/releases).
 
-### Android (prueba)
-
-[**Descargar MusicCraft para Android 0.13**](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-Android-0.13.apk) · [Código e instrucciones](mobile/android/README.md)
-
-APK experimental para Android 8 o posterior, firmado con la clave de MusicCraft. Incluye música local, reproducción online, ecualizador, visualizador y controles multimedia. Para pausar durante llamadas telefónicas solicita el permiso de estado del teléfono; no solicita números ni historial. Los archivos se eligen con el selector de Android, sin acceso general al almacenamiento. La pausa se ha probado con audio local y llamadas simuladas; falta probarla en teléfonos reales y con música online. Las fuentes y la ejecución en segundo plano pueden comportarse de forma distinta según el dispositivo; el filtrado de anuncios no está garantizado.
-
-**Actualización desde una versión de prueba:** la firma ha cambiado; Android puede exigir desinstalar la versión anterior, lo que puede borrar sus playlists y ajustes. Play Protect o el fabricante pueden mostrar avisos al instalar un APK externo.
-
-### iPhone (en desarrollo)
-
-La [base de iOS](mobile/ios/README.md) aún es incompleta: la música online y el filtrado están pendientes. GitHub Actions intenta compilar versiones para el simulador y para iPhone. El archivo IPA de prueba no está firmado; es necesario firmarlo con una cuenta de Apple antes de instalarlo. Por ejemplo, AltStore Classic puede realizar la firma para pruebas personales desde Windows; no se ha probado MusicCraft con este método.
-
-Linux y macOS todavía no son compatibles: la adaptación de ventanas, navegador y filtrado está pendiente. Los paquetes para estos sistemas aún no están disponibles.
+**Actualización de Android:** el APK 0.13 tiene una firma distinta de las versiones de prueba anteriores. Puede ser necesario desinstalar la anterior, lo que puede borrar sus ajustes y playlists. Android o el fabricante pueden mostrar avisos al instalar aplicaciones de fuera de una tienda.
 
 ## Funciones
 
-- Ventanas para el reproductor, el ecualizador, la cola y la biblioteca, que se pueden mover, acoplar y plegar.
-- Búsqueda de vídeos y playlists de YouTube y gestión de una cola de reproducción.
-- Reproducción de archivos de audio locales compatibles con el sistema.
-- Ecualizador para archivos locales y fuentes compatibles de YouTube.
-- Listas guardadas de vídeos de YouTube.
-- Navegador WebView2 integrado con el motor `adblock-rust` y reglas de filtrado incluidas. No utiliza el navegador Brave completo y el filtrado de anuncios no está garantizado.
+- Interfaz clásica con reproductor, ecualizador, cola de reproducción y biblioteca.
+- Música local, búsqueda online y listas guardadas; la disponibilidad de contenido depende del servicio de origen.
+- En Windows, módulos que pueden moverse, acoplarse y plegarse. En Android, módulos plegables y reordenables.
+- En Android, controles multimedia y reproducción en segundo plano; el comportamiento puede variar según el teléfono.
+- Visualizador de frecuencias en Android para archivos locales y fuentes online compatibles.
+- Pausa durante llamadas telefónicas en Android: se ha probado con una llamada simulada y música local; falta probarla en teléfonos reales y con fuentes online.
 
-## Capturas
+## Imágenes
 
-Imágenes de pruebas anteriores al cambio de nombre: muestran BraveAmp y algunos controles pueden diferir de la versión actual.
+Estas capturas son de una versión anterior de escritorio y pueden mostrar el nombre anterior y controles diferentes.
 
 | Reproductor | Ecualizador |
 | --- | --- |
-| ![Reproductor clásico](docs/images/reproductor.png) | ![Panel del ecualizador](docs/images/ecualizador.png) |
+| ![Reproductor clásico](docs/images/reproductor.png) | ![Ecualizador](docs/images/ecualizador.png) |
 
-| Cola y búsqueda | Biblioteca local |
+| Lista de reproducción | Biblioteca |
 | --- | --- |
-| ![Cola y búsqueda de YouTube](docs/images/playlist.png) | ![Vista parcial de la biblioteca local](docs/images/biblioteca.png) |
+| ![Cola y búsqueda](docs/images/playlist.png) | ![Biblioteca local](docs/images/biblioteca.png) |
 
-## Requisitos y compilación
+## Privacidad y permisos en Android
 
-Se necesita Windows, el entorno de desarrollo de Rust, las herramientas de compilación de C++ para Visual Studio y Microsoft Edge WebView2 Runtime. Desde una consola de desarrollo de Visual Studio, en la carpeta del proyecto:
+Para abrir música local, MusicCraft usa el selector de archivos de Android y accede a los archivos elegidos, sin pedir acceso general al almacenamiento. La pausa en llamadas solicita permiso para conocer el estado del teléfono; no solicita el historial ni los números. También utiliza acceso a Internet y un servicio de reproducción en segundo plano. Algunas funciones y controles pueden variar entre dispositivos.
+
+## Desarrollo
+
+El escritorio actual usa Rust, Tao y WebView2 en Windows. La versión Android utiliza Java, JavaScript/Web Audio y el motor de filtrado en Rust. Consulta [Android](mobile/android/README.md) y [iOS](mobile/ios/README.md) para instrucciones y limitaciones. Para compilar Windows se necesitan Rust, herramientas C++ de Visual Studio y Microsoft Edge WebView2 Runtime:
 
 ```powershell
 cargo build --release
-```
-
-El ejecutable se genera en `target/release/musiccraft.exe`. Para ejecutar las pruebas:
-
-```powershell
 cargo test
 ```
 
-## Limitaciones conocidas
+La clave privada de firma de Android no se incluye en el repositorio. Los vídeos online pueden solicitar cookies o interacción; las playlists largas pueden importarse parcialmente y el ecualizador depende de la compatibilidad de la fuente.
 
-- YouTube puede solicitar una elección de cookies o una interacción antes de reproducir. El inicio de la primera canción después de una búsqueda necesita más pruebas.
-- El comportamiento y la disponibilidad de vídeos pueden cambiar. El ecualizador de YouTube depende de que la fuente de audio sea compatible.
-- Las listas largas pueden importarse parcialmente. Las listas privadas o restringidas pueden requerir iniciar sesión.
-- La cola no se conserva al cerrar; los archivos locales no se incluyen en las listas guardadas.
-- Las listas de filtros incluidas son una instantánea y no se actualizan automáticamente.
-- El icono del zorro es una propuesta visual incluida en el repositorio; aún no sustituye al icono del ejecutable.
+## Licencias
 
-## Licencias y componentes de terceros
-
-El código propio se ofrece con doble licencia **MIT o Apache 2.0**, a elección de quien lo utilice, como en el repositorio de SoundCraft. Consulta [LICENSE-MIT](LICENSE-MIT) y [LICENSE-APACHE](LICENSE-APACHE).
-
-El proyecto utiliza bibliotecas y listas de filtros de terceros, cada una con sus propias condiciones. `LICENCIA-ADBLOCK.txt` contiene la licencia MPL-2.0 de adblock-rust; los encabezados de las listas incluidas en `browser/filters/` identifican sus respectivos proyectos y licencias. Antes de redistribuir o reutilizar componentes, revisa sus condiciones y las de sus dependencias.
+El código propio se distribuye bajo **MIT o Apache 2.0**, a tu elección: [LICENSE-MIT](LICENSE-MIT) y [LICENSE-APACHE](LICENSE-APACHE). Los componentes y listas de terceros tienen sus propias condiciones; consulta [LICENCIA-ADBLOCK.txt](LICENCIA-ADBLOCK.txt) y los encabezados de las listas incluidas.

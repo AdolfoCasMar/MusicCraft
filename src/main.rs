@@ -154,7 +154,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         browserviews.push(view);
     }
-    let mut state = json!({"title":"MUSICCRAFT · RUST","status":"LISTO","notice":"Busca música en YouTube.","time":0,"duration":0,"playing":false,"volume":70,"shuffle":false,"repeat":false,"currentIndex":-1,"queue":[],"results":[],"searchStatus":"Busca canciones o playlists en YouTube.","capabilities":{"playback":true,"search":true,"playlist":true,"equalizer":true},"eqStatus":"Ecualizador para YouTube y archivos locales.","eq":{"enabled":false,"preamp":0,"bands":[0,0,0,0,0,0,0,0,0]}});
+    let mut state = json!({"title":"MUSICCRAFT · RUST","status":"LISTO","notice":"Busca música online.","time":0,"duration":0,"playing":false,"volume":70,"shuffle":false,"repeat":false,"currentIndex":-1,"queue":[],"results":[],"searchStatus":"Busca canciones o playlists online.","capabilities":{"playback":true,"search":true,"playlist":true,"equalizer":true},"eqStatus":"Ecualizador para música online y archivos locales.","eq":{"enabled":false,"preamp":0,"bands":[0,0,0,0,0,0,0,0,0]}});
     let mut queue: Vec<Value> = Vec::new();
     let mut results: Vec<Value> = Vec::new();
     let mut current: Option<usize> = None;
@@ -308,21 +308,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
      "window_close"=>{if panel=="player"{*flow=ControlFlow::Exit}else if let Some(p)=panels.get(&panel){p.window.set_visible(false);panel_order.retain(|n|n!=&panel);}},
      "window_minimize"=>{if let Some(p)=panels.get(&panel){p.window.set_minimized(true);}},
      "toggle_window"=>{if let Some(name)=msg["panel"].as_str(){if let Some(p)=panels.get(name){if p.window.is_visible(){p.window.set_visible(false);panel_order.retain(|n|n!=name);}else{open_panel_fifo(&panels,name,&mut panel_order,&mut last_player_pos);}}}},
-     "browser_toggle"=>{consent_view=None;showing=!showing;if showing && !panels["playlist"].window.is_visible(){open_panel_fifo(&panels,"playlist",&mut panel_order,&mut last_player_pos);}let _=browserviews[shown_idx].set_visible(showing);state["notice"]=json!(if showing{"YouTube integrado: acepta cookies o inicia la reproducción."}else{"YouTube oculto dentro de la aplicación."});},
-     "search"=>{let q=msg["query"].as_str().unwrap_or("").trim();if !q.is_empty(){search_kind=msg["kind"].as_str().unwrap_or("songs").to_string();let mut u=url::Url::parse("https://www.youtube.com/results").unwrap();u.query_pairs_mut().append_pair("search_query",q).append_pair("sp",if search_kind=="playlists"{"EgIQAw=="}else{"EgIQAQ=="});let _=browserviews[1].load_url(u.as_str());results.clear();state["results"]=json!([]);state["searchStatus"]=json!("Buscando en YouTube… Si pide cookies, pulsa VER YOUTUBE.");if showing{let _=browserviews[shown_idx].set_visible(false);}shown_idx=1;if showing{let _=browserviews[shown_idx].set_visible(true);}}},
+     "browser_toggle"=>{consent_view=None;showing=!showing;if showing && !panels["playlist"].window.is_visible(){open_panel_fifo(&panels,"playlist",&mut panel_order,&mut last_player_pos);}let _=browserviews[shown_idx].set_visible(showing);state["notice"]=json!(if showing{"Servicio integrado: acepta cookies o inicia la reproducción."}else{"Servicio oculto dentro de la aplicación."});},
+     "search"=>{let q=msg["query"].as_str().unwrap_or("").trim();if !q.is_empty(){search_kind=msg["kind"].as_str().unwrap_or("songs").to_string();let mut u=url::Url::parse("https://www.youtube.com/results").unwrap();u.query_pairs_mut().append_pair("search_query",q).append_pair("sp",if search_kind=="playlists"{"EgIQAw=="}else{"EgIQAQ=="});let _=browserviews[1].load_url(u.as_str());results.clear();state["results"]=json!([]);state["searchStatus"]=json!("Buscando música… Si pide cookies, pulsa VER AVISO.");if showing{let _=browserviews[shown_idx].set_visible(false);}shown_idx=1;if showing{let _=browserviews[shown_idx].set_visible(true);}}},
      "local_add"=>{if panel=="library"{if let (Some(id),Some(title))=(msg["index"].as_u64(),msg["title"].as_str()){if title.len()<512 {let item=json!({"id":id,"title":title,"kind":"local"});queue.push(item);if msg["play"].as_bool().unwrap_or(false){current=Some(queue.len()-1);local_source=true;state["capabilities"]["equalizer"]=json!(true);state["eqStatus"]=json!("Ecualizador activo para archivos locales.");state["title"]=json!(title);load(queue.last().unwrap(),&browserviews[0],&panels["library"].webview);}}}}},
      "local_state"=>{if panel=="library" && local_source {for key in ["time","duration","playing"]{if !msg[key].is_null(){state[key]=msg[key].clone();}}state["status"]=json!(if msg["playing"].as_bool().unwrap_or(false){"REPRODUCIENDO"}else{"EN PAUSA"});
-      let ended=msg["ended"].as_bool().unwrap_or(false);if ended && !ended_latch && !queue.is_empty(){ended_latch=true;if let Some(n)=playback::next_from_state(current,queue.len(),&state){current=Some(n);let item=&queue[n];local_source=item["kind"]=="local";state["capabilities"]["equalizer"]=json!(true);state["eqStatus"]=json!(if local_source{"Ecualizador activo para archivos locales."}else{"Ecualizador disponible para YouTube."});state["title"]=item["title"].clone();load(item,&browserviews[0],&panels["library"].webview);}}if !ended{ended_latch=false;}
+      let ended=msg["ended"].as_bool().unwrap_or(false);if ended && !ended_latch && !queue.is_empty(){ended_latch=true;if let Some(n)=playback::next_from_state(current,queue.len(),&state){current=Some(n);let item=&queue[n];local_source=item["kind"]=="local";state["capabilities"]["equalizer"]=json!(true);state["eqStatus"]=json!(if local_source{"Ecualizador activo para archivos locales."}else{"Ecualizador disponible para música online."});state["title"]=item["title"].clone();load(item,&browserviews[0],&panels["library"].webview);}}if !ended{ended_latch=false;}
      }},
      "save_playlist"=>{if let Some(n)=msg["name"].as_str(){match saved_lists.save(n,&queue){Ok(excluded)=>{state["savedPlaylists"]=json!(saved_lists.names());state["notice"]=json!(if excluded>0{"Lista guardada; archivos locales no incluidos."}else{"Playlist guardada."});},Err(e)=>state["notice"]=json!(format!("No se pudo guardar: {e}"))}}},
      "load_playlist"=>{if let Some(items)=msg["name"].as_str().and_then(|n|saved_lists.get(n)){queue.extend(items.clone());state["notice"]=json!("Playlist añadida a la cola.");}},
      "delete_playlist"=>{if let Some(n)=msg["name"].as_str(){match saved_lists.delete(n){Ok(())=>state["savedPlaylists"]=json!(saved_lists.names()),Err(e)=>state["notice"]=json!(format!("No se pudo borrar: {e}"))}}},
      "eq_change"|"eq_enabled"|"eq_preset"=>{equalizer::adjust(&mut state["eq"],cmd,index,val,&msg);equalizer::apply(&state["eq"],local_source,&browserviews[0],&panels["library"].webview);},
-     "add_url"=>{if let Some(id)=msg["url"].as_str().and_then(video_id){let item=json!({"id":id,"title":format!("YouTube · {id}"),"kind":"songs"});queue.push(item);state["notice"]=json!("Añadido a la cola.");}else{state["notice"]=json!("Introduce un enlace de vídeo individual de YouTube.");}},
-     "add_result"|"play_result"=>{if let Some(item)=results.get(index){if item["kind"]=="songs" {queue.push(item.clone());if cmd=="play_result"{current=Some(queue.len()-1);if showing{let _=browserviews[shown_idx].set_visible(false);}shown_idx=0;if showing{let _=browserviews[0].set_visible(true);}if load(item,&browserviews[0],&panels["library"].webview){state["status"]=json!("CARGANDO");state["notice"]=json!("Si YouTube pide confirmación, pulsa VER YOUTUBE.");}}}else if let Some(id)=item["id"].as_str(){
+     "add_url"=>{if let Some(id)=msg["url"].as_str().and_then(video_id){let item=json!({"id":id,"title":format!("Canción · {id}"),"kind":"songs"});queue.push(item);state["notice"]=json!("Añadido a la cola.");}else{state["notice"]=json!("Introduce un enlace de una canción compatible.");}},
+     "add_result"|"play_result"=>{if let Some(item)=results.get(index){if item["kind"]=="songs" {queue.push(item.clone());if cmd=="play_result"{current=Some(queue.len()-1);if showing{let _=browserviews[shown_idx].set_visible(false);}shown_idx=0;if showing{let _=browserviews[0].set_visible(true);}if load(item,&browserviews[0],&panels["library"].webview){state["status"]=json!("CARGANDO");state["notice"]=json!("Si el servicio pide confirmación, pulsa VER AVISO.");}}}else if let Some(id)=item["id"].as_str(){
        if id.len()<160 && id.bytes().all(|c|c.is_ascii_alphanumeric()||c==b'_'||c==b'-'){
         import_pending=true;let _=browserviews[1].load_url(&format!("https://www.youtube.com/playlist?list={id}"));
-        state["searchStatus"]=json!("Cargando playlist… Si pide cookies, pulsa YT en el reproductor.");
+        state["searchStatus"]=json!("Cargando playlist… Si pide cookies, pulsa WEB en el reproductor.");
        }
       }}},
      "play_queue"=>{if let Some(item)=queue.get(index){current=Some(index);if showing{let _=browserviews[shown_idx].set_visible(false);}shown_idx=0;if showing{let _=browserviews[0].set_visible(true);}load(item,&browserviews[0],&panels["library"].webview);state["status"]=json!("CARGANDO");}},
@@ -335,7 +335,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
      "shuffle"|"repeat"=>{state[cmd]=json!(!state[cmd].as_bool().unwrap_or(false));},
      _=>{}
     }
-    if let Some(i)=current {if let Some(item)=queue.get(i){let next_local=item["kind"]=="local";if next_local{state["title"]=item["title"].clone();}if next_local!=local_source{local_source=next_local;state["capabilities"]["equalizer"]=json!(true);state["eqStatus"]=json!(if local_source{"Ecualizador activo para archivos locales."}else{"Ecualizador disponible para YouTube."});}}}
+    if let Some(i)=current {if let Some(item)=queue.get(i){let next_local=item["kind"]=="local";if next_local{state["title"]=item["title"].clone();}if next_local!=local_source{local_source=next_local;state["capabilities"]["equalizer"]=json!(true);state["eqStatus"]=json!(if local_source{"Ecualizador activo para archivos locales."}else{"Ecualizador disponible para música online."});}}}
     state["queue"]=json!(queue);state["currentIndex"]=json!(current.map(|i|i as i64).unwrap_or(-1));emit(&panels,&state);
    },
    Event::UserEvent(AppEvent::Navigation(mode,kind))=>{
@@ -345,28 +345,28 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
      if showing && shown_idx!=idx {let _=browserviews[shown_idx].set_visible(false);}
      if !panels["playlist"].window.is_visible(){open_panel_fifo(&panels,"playlist",&mut panel_order,&mut last_player_pos);}
      shown_idx=idx;showing=true;consent_view=Some(idx);let _=browserviews[idx].set_visible(true);
-     state["notice"]=json!("YouTube pide elegir cookies en el panel de playlist.");
-     state["searchStatus"]=json!("Elige tus preferencias de cookies en YouTube para continuar.");
+     state["notice"]=json!("El servicio pide elegir cookies en el panel de playlist.");
+     state["searchStatus"]=json!("Elige tus preferencias de cookies para continuar.");
     } else if consent_view==Some(idx) {
-     state["notice"]=json!("Cuando termines en YouTube, pulsa YT para ocultar la página.");
-     state["searchStatus"]=json!("Continúa en YouTube; pulsa YT para ocultar la página.");
+     state["notice"]=json!("Cuando termines, pulsa WEB para ocultar la página.");
+     state["searchStatus"]=json!("Continúa en el servicio; pulsa WEB para ocultar la página.");
     }
     emit(&panels,&state);
    },
    Event::UserEvent(AppEvent::Browser(mode,msg))=>{
     let idx=if mode=="search"{1}else{0};
     if msg["type"]=="eq_error" && idx==0 {state["eqStatus"]=json!(msg["message"].as_str().unwrap_or("No se pudo activar el ecualizador para este vídeo."));}
-    if msg["type"]=="eq_ready" && idx==0 {state["eqStatus"]=json!("Ecualizador conectado al audio de YouTube.");}
+    if msg["type"]=="eq_ready" && idx==0 {state["eqStatus"]=json!("Ecualizador conectado al audio online.");}
     if msg["type"]=="consent_required" {
      if showing && shown_idx!=idx {let _=browserviews[shown_idx].set_visible(false);}
      if !panels["playlist"].window.is_visible(){open_panel_fifo(&panels,"playlist",&mut panel_order,&mut last_player_pos);}
      shown_idx=idx;showing=true;consent_view=Some(idx);let _=browserviews[idx].set_visible(true);
-     state["notice"]=json!("YouTube pide elegir cookies en el panel de playlist.");
-     state["searchStatus"]=json!("Elige tus preferencias de cookies en YouTube para continuar.");
+     state["notice"]=json!("El servicio pide elegir cookies en el panel de playlist.");
+     state["searchStatus"]=json!("Elige tus preferencias de cookies para continuar.");
     }
     if msg["type"]=="consent_resolved" && consent_view==Some(idx) {
      let _=browserviews[idx].set_visible(false);showing=false;consent_view=None;
-     state["notice"]=json!("Continuando en YouTube…");
+     state["notice"]=json!("Continuando reproducción…");
     }
     if mode=="search" && msg["type"]=="playlist" && import_pending {
      if let Some(items)=msg["results"].as_array(){ if !items.is_empty() {let count=items.len();queue.extend(items.iter().filter(|x|x["kind"]=="songs").cloned());import_pending=false;state["queue"]=json!(queue);state["searchStatus"]=json!(format!("{count} canciones añadidas; se importan las entradas cargadas inicialmente."));}}
@@ -374,7 +374,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if mode=="search" && msg["type"]=="results" {if let Some(items)=msg["results"].as_array(){results=items.iter().filter(|x|x["kind"].as_str()==Some(search_kind.as_str())).take(35).cloned().collect();state["results"]=json!(results);state["searchStatus"]=json!(format!("{} resultados. Los vídeos pueden incluir contenido no musical.",results.len()));}}
     if mode=="playback" && msg["type"]=="playback" && !local_source {if eq_needs_apply && state["eq"]["enabled"].as_bool().unwrap_or(false){let _=browserviews[0].evaluate_script(&format!("window.braveampEq&&window.braveampEq.configure({});",state["eq"]));eq_needs_apply=false;}let s=&msg["state"];for key in ["title","time","duration","playing"]{if !s[key].is_null(){state[key]=s[key].clone();}}if let Some(v)=s["volume"].as_f64(){state["volume"]=json!((v*100.0).round());}state["status"]=json!(if s["playing"].as_bool().unwrap_or(false){"REPRODUCIENDO"}else{"EN PAUSA"});
      let ended=s["ended"].as_bool().unwrap_or(false);
-     if ended && !ended_latch && !queue.is_empty() {ended_latch=true;if let Some(n)=playback::next_from_state(current,queue.len(),&state){current=Some(n);state["currentIndex"]=json!(n);local_source=queue[n]["kind"]=="local";state["capabilities"]["equalizer"]=json!(true);state["eqStatus"]=json!(if local_source{"Ecualizador activo para archivos locales."}else{"Ecualizador disponible para YouTube."});state["title"]=queue[n]["title"].clone();load(&queue[n],&browserviews[0],&panels["library"].webview);}}
+     if ended && !ended_latch && !queue.is_empty() {ended_latch=true;if let Some(n)=playback::next_from_state(current,queue.len(),&state){current=Some(n);state["currentIndex"]=json!(n);local_source=queue[n]["kind"]=="local";state["capabilities"]["equalizer"]=json!(true);state["eqStatus"]=json!(if local_source{"Ecualizador activo para archivos locales."}else{"Ecualizador disponible para música online."});state["title"]=queue[n]["title"].clone();load(&queue[n],&browserviews[0],&panels["library"].webview);}}
      if !ended {ended_latch=false;}
     }
     emit(&panels,&state);
