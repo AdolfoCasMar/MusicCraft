@@ -3,8 +3,11 @@ on:
   push:
     branches: [desktop-cross-platform]
   workflow_dispatch:
+concurrency:
+  group: desktop-port-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
-  contents: read
+  contents: write
 jobs:
   build:
     strategy:
@@ -54,6 +57,15 @@ jobs:
           <plist version="1.0"><dict><key>CFBundleName</key><string>MusicCraft</string><key>CFBundleIdentifier</key><string>org.musiccraft.desktop</string><key>CFBundleExecutable</key><string>MusicCraft</string><key>CFBundlePackageType</key><string>APPL</string><key>CFBundleShortVersionString</key><string>0.8.2</string><key>NSHighResolutionCapable</key><true/></dict></plist>
           EOF
           ditto -c -k --keepParent MusicCraft.app MusicCraft-macOS-preview.zip
+      - name: Package Linux application
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          mkdir -p package-linux
+          cp target/release/musiccraft package-linux/MusicCraft
+          chmod 755 package-linux/MusicCraft
+          printf '%s\n' 'MusicCraft Linux alpha (x86-64)' 'Requires GTK 3, WebKitGTK 4.1 and X11 or XWayland.' 'Experimental: network request filtering is not implemented on this platform. Playback, window docking and background behavior need further testing.' > package-linux/README.txt
+          tar -czf MusicCraft-Linux-preview.tar.gz -C package-linux .
       - uses: actions/upload-artifact@v4
         with:
           name: MusicCraft-port-preview-${{ matrix.platform }}
@@ -61,4 +73,23 @@ jobs:
             target/release/musiccraft
             target/release/musiccraft.exe
             MusicCraft-macOS-preview.zip
+            MusicCraft-Linux-preview.tar.gz
           if-no-files-found: error
+  publish-alpha:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: MusicCraft-port-preview-*
+          path: artifacts
+      - name: Publish clearly marked previews
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if gh release view desktop-v0.8.2-alpha.1 >/dev/null 2>&1; then
+            echo 'Preview already published; leaving it unchanged.'
+          else
+            gh release create desktop-v0.8.2-alpha.1 artifacts/MusicCraft-port-preview-linux-x64/MusicCraft-Linux-preview.tar.gz artifacts/MusicCraft-port-preview-macos-arm64/MusicCraft-macOS-preview.zip --target "$GITHUB_SHA" --prerelease --title 'Linux and macOS — early test builds' --notes 'Early experimental builds, not feature-equivalent to Windows. Linux requires GTK 3, WebKitGTK 4.1 and X11 or XWayland. macOS build is unsigned. Network request filtering is not implemented on Linux or macOS, so advertisements may appear. Linux startup is smoke-tested; actual playback, docking, backgrounds, macOS runtime and hardware compatibility need testing.'
+          fi
