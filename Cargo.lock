@@ -1185,6 +1185,7 @@ name = "musiccraft"
 version = "0.8.2"
 dependencies = [
  "adblock",
+ "gtk",
  "serde",
  "serde_json",
  "tao",

@@ -7,12 +7,17 @@ use adblock::{
     Engine,
 };
 use std::rc::Rc;
+#[cfg(target_os = "windows")]
 use webview2_com::{
     take_pwstr, Microsoft::Web::WebView2::Win32::*, WebResourceRequestedEventHandler,
 };
+#[cfg(target_os = "windows")]
 use windows::core::{Interface, HSTRING, PWSTR};
+#[cfg(target_os = "windows")]
 use windows::Win32::System::Com::IStream;
+#[cfg(target_os = "windows")]
 use windows::Win32::UI::Shell::SHCreateMemStream;
+#[cfg(target_os = "windows")]
 use wry::{WebView, WebViewExtWindows};
 
 fn make_engine() -> Engine {
@@ -101,6 +106,7 @@ fn redirect_payload(data: &str) -> Option<(&str, Vec<u8>)> {
     Some((mime, decode_base64(encoded)?))
 }
 
+#[cfg(target_os = "windows")]
 fn request_type(context: COREWEBVIEW2_WEB_RESOURCE_CONTEXT) -> &'static str {
     match context {
         COREWEBVIEW2_WEB_RESOURCE_CONTEXT_DOCUMENT => "document",
@@ -119,6 +125,7 @@ fn request_type(context: COREWEBVIEW2_WEB_RESOURCE_CONTEXT) -> &'static str {
 
 /// Install immediately after building the YouTube webview, before navigating it.
 /// Returns an event registration token; WebView2 retains the callback.
+#[cfg(target_os = "windows")]
 pub fn install(webview: &WebView) -> windows::core::Result<i64> {
     let engine = FILTER_ENGINE.with(Rc::clone);
     let inner = webview.webview();

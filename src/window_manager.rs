@@ -1,5 +1,6 @@
 //! Window placement, docking and sizing.
 use std::collections::HashMap;
+#[cfg(target_os = "windows")]
 use tao::platform::windows::WindowExtWindows;
 use tao::window::Window;
 use wry::WebView;
@@ -8,6 +9,7 @@ pub(crate) struct Panel {
     pub webview: WebView,
 }
 pub(crate) type VRect = (i32, i32, i32, i32);
+#[cfg(target_os = "windows")]
 pub(crate) fn visible_rect(window: &Window) -> Option<VRect> {
     use windows::Win32::{
         Foundation::{HWND, RECT},
@@ -31,6 +33,12 @@ pub(crate) fn visible_rect(window: &Window) -> Option<VRect> {
         let z = window.outer_size();
         Some((p.x, p.y, z.width as i32, z.height as i32))
     }
+}
+#[cfg(not(target_os = "windows"))]
+pub(crate) fn visible_rect(window: &Window) -> Option<VRect> {
+    let p = window.outer_position().ok()?;
+    let z = window.outer_size();
+    Some((p.x,p.y,z.width as i32,z.height as i32))
 }
 pub(crate) fn set_visible_position(window: &Window, x: i32, y: i32) {
     if let (Some(r), Ok(p)) = (visible_rect(window), window.outer_position()) {

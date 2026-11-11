@@ -1,6 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use serde_json::{json, Value};
 use std::{collections::HashMap, path::PathBuf};
+#[cfg(target_os = "windows")]
 use tao::platform::windows::WindowExtWindows;
 use tao::{
     dpi::{LogicalPosition, LogicalSize},
@@ -35,6 +36,8 @@ fn emit(panels: &HashMap<String, Panel>, state: &Value) {
     }
 }
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    #[cfg(target_os = "linux")]
+    gtk::init()?;
     let event_loop = EventLoopBuilder::<AppEvent>::with_user_event().build();
     let html = include_str!("../ui/index.html")
         .replace(
@@ -66,11 +69,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         ("playlist", 415, 470),
         ("library", 80, 470),
     ] {
+        #[cfg(target_os = "windows")]
         let owner = if name == "player" {
             None
         } else {
             Some(panels["player"].window.hwnd())
         };
+        #[cfg(not(target_os = "windows"))]
+        let owner = None;
         let builder = WindowBuilder::new()
             .with_title(format!("MusicCraft - {name}"))
             .with_decorations(false)
@@ -148,6 +154,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
             })
             .build_as_child(&panels["playlist"].window)?;
+        #[cfg(target_os = "windows")]
         match shields::install(&view) {
             Ok(_) => {}
             Err(e) => eprintln!("Filtro no disponible: {e}"),
@@ -237,13 +244,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     panel_order.extend(secondary_order);
     let mut last_player_pos = panels["player"].window.outer_position().ok();
     event_loop.run(move |event,_,flow|{
+  #[cfg(target_os = "linux")]
+  while gtk::events_pending() { gtk::main_iteration_do(false); }
   let _keep_web_context_alive=&web_context;
   *flow=match &pending_arrange {Some((t,_))=>ControlFlow::WaitUntil(*t),None=>ControlFlow::Wait};
+  #[cfg(target_os = "linux")]
+  if pending_arrange.is_none() { *flow=ControlFlow::WaitUntil(std::time::Instant::now()+std::time::Duration::from_millis(25)); }
   match event {
    Event::NewEvents(tao::event::StartCause::Init)=>{arrange_panel(&panels,"equalizer");arrange_panel(&panels,"playlist");},
    Event::NewEvents(tao::event::StartCause::ResumeTimeReached{..})=>{
     if pending_arrange.as_ref().is_some_and(|(t,_)|std::time::Instant::now()>=*t){
+     #[cfg(target_os = "windows")]
      let mouse_down=unsafe{windows::Win32::UI::Input::KeyboardAndMouse::GetAsyncKeyState(1)}<0;
+     #[cfg(not(target_os = "windows"))]
+     let mouse_down=false;
      if mouse_down {if let Some((t,_))=&mut pending_arrange{*t=std::time::Instant::now()+std::time::Duration::from_millis(160);}}
      else {
       let target=active_drag.take().or_else(||pending_arrange.as_ref().map(|(_,n)|n.clone())).unwrap_or_default();pending_arrange=None;
@@ -272,6 +286,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
    },
    Event::WindowEvent{window_id,event:WindowEvent::CloseRequested,..}=>{if panels["player"].window.id()==window_id{*flow=ControlFlow::Exit}else{for p in panels.values(){if p.window.id()==window_id{p.window.set_visible(false)}}}},
    Event::WindowEvent{window_id,event:WindowEvent::Resized(size),..}=>{
+    #[cfg(target_os = "linux")]
+    if let Some(panel)=panels.values().find(|p|p.window.id()==window_id) {
+     let _=panel.webview.set_bounds(Rect{position:tao::dpi::PhysicalPosition::new(0,0).into(),size:(*size).into()});
+    }
     if panels["playlist"].window.id()==window_id {let scale=panels["playlist"].window.scale_factor();let logical=size.to_logical::<f64>(scale);for web in &browserviews {let _=web.set_bounds(Rect{position:LogicalPosition::new(0.0,20.0).into(),size:LogicalSize::new(logical.width,(logical.height-20.0).max(1.0)).into()});}}
     if std::time::Instant::now()>=scaling_until {if let Some((name,_))=panels.iter().find(|(_,p)|p.window.id()==window_id){pending_arrange=Some((std::time::Instant::now()+std::time::Duration::from_millis(220),name.clone()));}}
    },
