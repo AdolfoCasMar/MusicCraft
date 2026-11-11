@@ -37,7 +37,14 @@ fn emit(panels: &HashMap<String, Panel>, state: &Value) {
 }
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     #[cfg(target_os = "linux")]
-    gtk::init()?;
+    {
+        // Wry's child webviews below currently require X11, including XWayland.
+        if std::env::var_os("DISPLAY").is_none() {
+            return Err("MusicCraft necesita una sesión gráfica X11 o XWayland en esta versión experimental.".into());
+        }
+        if std::env::var_os("GDK_BACKEND").is_none() { std::env::set_var("GDK_BACKEND", "x11"); }
+        gtk::init()?;
+    }
     let event_loop = EventLoopBuilder::<AppEvent>::with_user_event().build();
     let html = include_str!("../ui/index.html")
         .replace(
@@ -164,6 +171,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         browserviews.push(view);
     }
     let mut state = json!({"title":"MUSICCRAFT · RUST","status":"LISTO","notice":"Busca música online.","time":0,"duration":0,"playing":false,"volume":70,"shuffle":false,"repeat":false,"currentIndex":-1,"queue":[],"results":[],"searchStatus":"Busca canciones o playlists online.","capabilities":{"playback":true,"search":true,"playlist":true,"equalizer":true},"eqStatus":"Ecualizador para música online y archivos locales.","eq":{"enabled":false,"preamp":0,"bands":[0,0,0,0,0,0,0,0,0]}});
+    #[cfg(not(target_os = "windows"))]
+    { state["notice"]=json!("Versión experimental: filtrado de red no disponible."); }
     let mut queue: Vec<Value> = Vec::new();
     let mut results: Vec<Value> = Vec::new();
     let mut current: Option<usize> = None;
