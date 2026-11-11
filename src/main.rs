@@ -55,10 +55,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cfg_dir = std::env::var_os("BRAVEAMP_DATA_DIR")
         .map(PathBuf::from)
         .unwrap_or_else(|| {
-            std::env::var_os("LOCALAPPDATA")
-                .map(PathBuf::from)
-                .unwrap_or_else(std::env::temp_dir)
-                .join("BraveAmpRust")
+            #[cfg(target_os = "windows")]
+            { std::env::var_os("LOCALAPPDATA").map(PathBuf::from).unwrap_or_else(std::env::temp_dir).join("BraveAmpRust") }
+            #[cfg(target_os = "macos")]
+            { std::env::var_os("HOME").map(PathBuf::from).unwrap_or_else(std::env::temp_dir).join("Library/Application Support/MusicCraft") }
+            #[cfg(target_os = "linux")]
+            { std::env::var_os("XDG_DATA_HOME").map(PathBuf::from).or_else(|| std::env::var_os("HOME").map(|h|PathBuf::from(h).join(".local/share"))).unwrap_or_else(std::env::temp_dir).join("MusicCraft") }
         });
     let _ = std::fs::create_dir_all(&cfg_dir);
     let mut web_context = WebContext::new(Some(cfg_dir.join("WebView2")));
