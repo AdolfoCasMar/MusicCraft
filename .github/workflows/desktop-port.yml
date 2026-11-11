@@ -7,7 +7,7 @@ concurrency:
   group: desktop-port-${{ github.ref }}
   cancel-in-progress: true
 permissions:
-  contents: write
+  contents: read
 jobs:
   build:
     strategy:
@@ -75,21 +75,3 @@ jobs:
             MusicCraft-macOS-preview.zip
             MusicCraft-Linux-preview.tar.gz
           if-no-files-found: error
-  publish-alpha:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: MusicCraft-port-preview-*
-          path: artifacts
-      - name: Publish clearly marked previews
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-        run: |
-          if gh release view desktop-v0.8.2-alpha.1 >/dev/null 2>&1; then
-            echo 'Preview already published; leaving it unchanged.'
-          else
-            gh release create desktop-v0.8.2-alpha.1 artifacts/MusicCraft-port-preview-linux-x64/MusicCraft-Linux-preview.tar.gz artifacts/MusicCraft-port-preview-macos-arm64/MusicCraft-macOS-preview.zip --target "$GITHUB_SHA" --prerelease --title 'Linux and macOS — early test builds' --notes 'Early experimental builds, not feature-equivalent to Windows. Linux requires GTK 3, WebKitGTK 4.1 and X11 or XWayland. macOS build is unsigned. Network request filtering is not implemented on Linux or macOS, so advertisements may appear. Linux startup is smoke-tested; actual playback, docking, backgrounds, macOS runtime and hardware compatibility need testing.'
-          fi
