@@ -12,12 +12,12 @@ MusicCraft es un reproductor gratuito y experimental inspirado en Winamp. Reúne
 
 | Plataforma | Estado | Descarga |
 | --- | --- | --- |
-| Android | Versión experimental firmada; Android 8 o superior, ARM64 o x86-64. | [Descargar APK 0.13](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-Android-0.13.apk) |
-| Windows | Versión experimental para Windows de 64 bits; necesita Microsoft Edge WebView2 Runtime. | [Descargar versión 0.8.1](https://github.com/AdolfoCasMar/MusicCraft/releases/download/v0.8.1/MusicCraft.exe) |
+| Android | Versión experimental firmada; Android 8 o superior, ARM64 o x86-64. | [Descargar APK 0.13](https://github.com/AdolfoCasMar/MusicCraft/releases/download/android-v0.13/MusicCraft-Android-0.13.apk) |
+| Windows | Versión experimental para Windows de 64 bits; necesita Microsoft Edge WebView2 Runtime. | [Descargar versión 0.8.2](https://github.com/AdolfoCasMar/MusicCraft/releases/download/windows-v0.8.2/MusicCraft-Windows-0.8.2.exe) |
 | iPhone | Prototipo inicial, sin búsqueda online ni filtrado; requiere firma para instalarlo. | [Consultar el proyecto iOS](mobile/ios/README.md) |
 | Linux y macOS | Adaptación pendiente; todavía no existen versiones funcionales. | — |
 
-La versión publicada de Windows puede diferir de los cambios más recientes del código. [Ver todas las versiones](https://github.com/AdolfoCasMar/MusicCraft/releases).
+[Ver todas las versiones](https://github.com/AdolfoCasMar/MusicCraft/releases).
 
 **Actualización de Android:** el APK 0.13 tiene una firma distinta de las versiones de prueba anteriores. Puede ser necesario desinstalar la anterior, lo que puede borrar sus ajustes y playlists. Android o el fabricante pueden mostrar avisos al instalar aplicaciones de fuera de una tienda.
 
@@ -60,3 +60,4 @@ La clave privada de firma de Android no se incluye en el repositorio. Los vídeo
 ## Licencias
 
 El código propio se distribuye bajo **MIT o Apache 2.0**, a tu elección: [LICENSE-MIT](LICENSE-MIT) y [LICENSE-APACHE](LICENSE-APACHE). Los componentes y listas de terceros tienen sus propias condiciones; consulta [LICENCIA-ADBLOCK.txt](LICENCIA-ADBLOCK.txt) y los encabezados de las listas incluidas.
+
