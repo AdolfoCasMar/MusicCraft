@@ -2,7 +2,7 @@
 
 <p align="center"><img src="assets/musiccraft-icon-propuesta.png" width="160" alt="Propuesta de icono: zorro con auriculares"></p>
 
-MusicCraft es un reproductor experimental para Windows, inspirado en los reproductores clásicos como Winamp. Combina una interfaz con ventanas acoplables, música local y reproducción de YouTube en una aplicación de escritorio escrita en Rust.
+MusicCraft es un reproductor experimental gratuito para Windows y Android, inspirado en los reproductores clásicos como Winamp. Permite escuchar música local y buscar contenido de YouTube desde una interfaz clásica.
 
 > **Estado:** prototipo en desarrollo. No está afiliada a ArtCraft, Winamp, Brave ni YouTube.
 
@@ -16,9 +16,11 @@ La versión es experimental y requiere Windows de 64 bits y Microsoft Edge WebVi
 
 ### Android (prueba)
 
-[**Descargar MusicCraft para Android 0.7**](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-Android-0.7-preview.apk) · [Código e instrucciones](mobile/android/README.md)
+[**Descargar MusicCraft para Android 0.13**](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-Android-0.13.apk) · [Código e instrucciones](mobile/android/README.md)
 
-APK experimental para Android 8 o posterior, firmado con una clave local de prueba. Incluye el icono de MusicCraft, música local, búsqueda y reproducción online, ecualizador, visualizador de espectro y controles multimedia con desplazamiento. El visualizador online depende de la compatibilidad de la fuente. Los nuevos controles de posición de Android deben probarse en un teléfono real. El filtrado de anuncios no está garantizado. Las actualizaciones requieren una firma compatible con la instalación anterior.
+APK experimental para Android 8 o posterior, firmado con la clave de MusicCraft. Incluye música local, reproducción online, ecualizador, visualizador y controles multimedia. Para pausar durante llamadas telefónicas solicita el permiso de estado del teléfono; no solicita números ni historial. Los archivos se eligen con el selector de Android, sin acceso general al almacenamiento. La pausa se ha probado con audio local y llamadas simuladas; falta probarla en teléfonos reales y con música online. Las fuentes y la ejecución en segundo plano pueden comportarse de forma distinta según el dispositivo; el filtrado de anuncios no está garantizado.
+
+**Actualización desde una versión de prueba:** la firma ha cambiado; Android puede exigir desinstalar la versión anterior, lo que puede borrar sus playlists y ajustes. Play Protect o el fabricante pueden mostrar avisos al instalar un APK externo.
 
 ### iPhone (en desarrollo)
 

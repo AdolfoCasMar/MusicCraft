@@ -250,8 +250,27 @@ public class MainActivity extends Activity {
         super.onCreate(state);
         WebView.setWebContentsDebuggingEnabled(false);
         PlaybackService.attach(this);
-        getWindow().setStatusBarColor(0xff121321);
-        getWindow().setNavigationBarColor(0xff121321);
+        if (checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE) != android.content.pm.PackageManager.PERMISSION_GRANTED &&
+                !getPreferences(MODE_PRIVATE).getBoolean("phone_permission_asked",false)) {
+            new android.app.AlertDialog.Builder(this)
+                .setTitle("Pausar durante las llamadas")
+                .setMessage("MusicCraft necesita conocer si hay una llamada para pausar la música. No necesita acceder a números ni al historial de llamadas.")
+                .setPositiveButton("Continuar",(dialog,which)->{
+                    getPreferences(MODE_PRIVATE).edit().putBoolean("phone_permission_asked",true).apply();
+                    requestPermissions(new String[]{android.Manifest.permission.READ_PHONE_STATE},43);
+                })
+                .setNegativeButton("Ahora no",(dialog,which)->getPreferences(MODE_PRIVATE).edit().putBoolean("phone_permission_asked",true).apply())
+                .show();
+        }
+        getWindow().getDecorView().setBackgroundColor(0xff10101a);
+        getWindow().setStatusBarColor(0xff10101a);
+        getWindow().setNavigationBarColor(0xff10101a);
+        if (android.os.Build.VERSION.SDK_INT >= 29) {
+            getWindow().setStatusBarContrastEnforced(false);
+            getWindow().setNavigationBarContrastEnforced(false);
+        }
+        getWindow().getDecorView().setSystemUiVisibility(
+            getWindow().getDecorView().getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         try (java.io.InputStream input = getAssets().open("youtube_probe.js")) {
             java.io.ByteArrayOutputStream output = new java.io.ByteArrayOutputStream(); byte[] buffer = new byte[4096]; int count;
             while ((count=input.read(buffer))!=-1) output.write(buffer,0,count);
@@ -259,6 +278,8 @@ public class MainActivity extends Activity {
         } catch (Exception e) { throw new IllegalStateException("No se pudo cargar el controlador de YouTube", e); }
         view = new PlaybackWebView(this);
         player = new PlaybackWebView(this);
+        player.setVerticalScrollBarEnabled(false);
+        player.setHorizontalScrollBarEnabled(false);
         searchView = new WebView(this);
         WebSettings settings = view.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -324,6 +345,14 @@ public class MainActivity extends Activity {
             }
         });
         root = new FrameLayout(this);
+        root.setBackgroundColor(0xff10101a);
+        if (android.os.Build.VERSION.SDK_INT >= 35) {
+            root.setOnApplyWindowInsetsListener((v, insets) -> {
+                android.graphics.Insets safe = insets.getInsets(android.view.WindowInsets.Type.systemBars() | android.view.WindowInsets.Type.displayCutout());
+                v.setPadding(safe.left, safe.top, safe.right, safe.bottom);
+                return insets;
+            });
+        }
         youtubePanel = new LinearLayout(this); youtubePanel.setOrientation(LinearLayout.VERTICAL);
         youtubeBack = new Button(this); youtubeBack.setText("VOLVER A MUSICCRAFT"); youtubeBack.setOnClickListener(v -> showYoutube(false));
         youtubePanel.addView(youtubeBack, new LinearLayout.LayoutParams(-1, -2));

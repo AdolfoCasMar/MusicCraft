@@ -7,3 +7,8 @@
 WebView2/
 layout.json
 playlists.json
+*.keystore
+*.jks
+*.p12
+*.pfx
+password.txt

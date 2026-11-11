@@ -1,0 +1,22 @@
+name: Publish Android preview
+on:
+  push:
+    branches: [main]
+    paths: ['downloads/MusicCraft-Android-0.13.apk', '.github/workflows/android-release.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish signed Android preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view android-v0.13 >/dev/null 2>&1; then
+            echo 'Release already exists; leaving its files unchanged.'
+          else
+            gh release create android-v0.13 downloads/MusicCraft-Android-0.13.apk --target "$GITHUB_SHA" --prerelease --title 'MusicCraft Android 0.13 (preview)' --notes 'Signed experimental Android build. Android 8+. The new signing key differs from older previews; uninstalling an old build may erase its data. Phone-state permission enables pausing for cellular calls. Calls were tested with local audio in an emulator; real devices and online playback still need verification. Filtering and background playback depend on the source and device.'
+          fi

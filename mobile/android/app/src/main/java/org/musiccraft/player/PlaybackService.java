@@ -7,6 +7,10 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.BroadcastReceiver;
+import android.telephony.TelephonyManager;
+import android.content.pm.PackageManager;
 import android.media.MediaMetadata;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
@@ -26,6 +30,16 @@ public final class PlaybackService extends Service {
     private String title = "MusicCraft";
     private long position, duration;
     private String notificationKey = "";
+    private boolean callActive;
+    private final BroadcastReceiver callReceiver = new BroadcastReceiver() {
+        @Override public void onReceive(Context context, Intent intent) {
+            String state=intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+            if (TelephonyManager.EXTRA_STATE_RINGING.equals(state)||TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state)) {
+                callActive=true;
+                send("pause");
+            } else if (TelephonyManager.EXTRA_STATE_IDLE.equals(state)) callActive=false;
+        }
+    };
 
     public static void attach(MainActivity target) { activity = new WeakReference<>(target); }
     public static void detach(MainActivity target) { if (activity.get()==target) activity.clear(); }
@@ -41,6 +55,15 @@ public final class PlaybackService extends Service {
 
     @Override public void onCreate() {
         super.onCreate(); instance=this;
+        IntentFilter calls=new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
+        if (android.os.Build.VERSION.SDK_INT >= 33) registerReceiver(callReceiver,calls,Context.RECEIVER_EXPORTED);
+        else registerReceiver(callReceiver,calls);
+        try {
+            if (checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE)==PackageManager.PERMISSION_GRANTED) {
+                TelephonyManager phone=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+                callActive=phone!=null && phone.getCallState()!=TelephonyManager.CALL_STATE_IDLE;
+            }
+        } catch (SecurityException ignored) {}
         NotificationManager notifications=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notifications.createNotificationChannel(new NotificationChannel(CHANNEL,"Reproducción de música",NotificationManager.IMPORTANCE_LOW));
         PowerManager power=(PowerManager)getSystemService(Context.POWER_SERVICE);
@@ -85,6 +108,7 @@ public final class PlaybackService extends Service {
         session.setPlaybackState(new PlaybackState.Builder().setActions(actions).setState(playing?PlaybackState.STATE_PLAYING:PlaybackState.STATE_PAUSED,position,playing?1f:0f).build());
     }
     private void update(String name, boolean isPlaying, double seconds, double total) {
+        if(callActive && isPlaying) send("pause");
         title=name==null||name.trim().isEmpty()?"MusicCraft":name.substring(0,Math.min(250,name.length()));
         playing=isPlaying; position=(long)(Math.max(0,seconds)*1000); duration=(long)(Math.max(0,total)*1000);
         if(playing){
@@ -101,6 +125,7 @@ public final class PlaybackService extends Service {
     }
     @Override public void onTaskRemoved(Intent intent) { send("stop");stopSelf();super.onTaskRemoved(intent); }
     @Override public void onDestroy() {
+        unregisterReceiver(callReceiver);
         if(wakeLock!=null&&wakeLock.isHeld())wakeLock.release();
         if(session!=null){session.setActive(false);session.release();}
         if(instance==this)instance=null;

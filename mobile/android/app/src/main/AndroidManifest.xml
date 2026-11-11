@@ -1,8 +1,9 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.musiccraft.player" android:versionCode="7" android:versionName="0.7-preview">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="org.musiccraft.player" android:versionCode="13" android:versionName="0.13-local">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <application android:label="MusicCraft" android:icon="@drawable/ic_launcher" android:theme="@android:style/Theme.Material.NoActionBar" android:usesCleartextTraffic="false" android:extractNativeLibs="true">
         <service android:name=".PlaybackService" android:exported="false" android:foregroundServiceType="mediaPlayback" />
         <activity android:name=".MainActivity" android:exported="true" android:configChanges="orientation|screenSize|keyboardHidden">

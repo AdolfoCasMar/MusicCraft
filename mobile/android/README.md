@@ -1,4 +1,4 @@
-# MusicCraft para Android — prototipo local
+# MusicCraft para Android — versión experimental
 
 Esta prueba es independiente de la aplicación de Windows. Usa una interfaz local dentro de una actividad Android para reproducir archivos elegidos por el usuario; no sube sus archivos. Incluye cola mixta de canciones locales y de YouTube, reproducción aleatoria y repetición, ecualizador de nueve bandas con preamplificador y ajustes, y biblioteca para guardar playlists de YouTube. La cola no se conserva al cerrar.
 
@@ -12,6 +12,8 @@ La aplicación utiliza un servicio de reproducción y una sesión multimedia de 
 
 La versión 0.7 incorpora un visualizador de frecuencias reales para archivos locales y fuentes online compatibles, y admite las solicitudes de desplazamiento de la sesión multimedia. La presentación y el gesto de la barra en notificaciones y pantalla de bloqueo deben verificarse en cada dispositivo.
 
-El prototipo usa Java para la ventana y JavaScript/Web Audio para la interfaz y audio; el filtrado usa Rust. No es una versión publicada.
+La versión 0.13 puede pausar la música al detectar una llamada telefónica. Para ello solicita el permiso de estado del teléfono; no solicita el historial ni los números. Se ha comprobado con un archivo local y una llamada simulada; hay que probarlo en dispositivos reales y con contenido online. La reproducción no se reanuda automáticamente tras la llamada.
+
+El prototipo usa Java para la ventana y JavaScript/Web Audio para la interfaz y audio; el filtrado usa Rust. El APK publicado está firmado con la clave privada del proyecto; esa clave y su contraseña no se distribuyen en el repositorio. Si se actualiza desde una versión anterior firmada con otra clave, puede ser necesario desinstalarla y perder los datos de la aplicación.
 
 Requiere Android 8.0 o posterior con procesador ARM de 64 bits o x86-64. La selección de archivos utiliza el selector del sistema; no pide acceso general a los archivos.
