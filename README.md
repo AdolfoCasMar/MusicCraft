@@ -12,7 +12,7 @@ MusicCraft es un reproductor gratuito y experimental inspirado en Winamp. Reúne
 
 | Plataforma | Estado | Descarga |
 | --- | --- | --- |
-| Android | Versión experimental firmada; Android 8 o superior, ARM64 o x86-64. | [Descargar APK 0.14](https://github.com/AdolfoCasMar/MusicCraft/releases/download/android-v0.14/MusicCraft-Android-0.14.apk) |
+| Android | Versión experimental firmada; Android 8 o superior, ARM64 o x86-64. | [Descargar APK 0.15](https://github.com/AdolfoCasMar/MusicCraft/releases/download/android-v0.15/MusicCraft-Android-0.15.apk) |
 | Windows | Versión experimental para Windows de 64 bits; necesita Microsoft Edge WebView2 Runtime. | [Descargar versión 0.8.3](https://github.com/AdolfoCasMar/MusicCraft/releases/download/windows-v0.8.3/MusicCraft-Windows-0.8.3.exe) |
 | iPhone | Prototipo inicial, sin búsqueda online ni filtrado; requiere firma para instalarlo. | [Consultar el proyecto iOS](mobile/ios/README.md) |
 | Linux | Prueba temprana para x86-64; requiere GTK 3, WebKitGTK 4.1 y X11 o XWayland. | [Descargar Linux alpha 0.8.3](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-Linux-alpha-0.8.3-x64.tar.gz) |
@@ -22,7 +22,7 @@ MusicCraft es un reproductor gratuito y experimental inspirado en Winamp. Reúne
 
 Las versiones de Linux y macOS todavía no son equivalentes a la de Windows: el filtrado de peticiones de red no está integrado y puede aparecer publicidad. Linux se ha comprobado arrancando en un entorno virtual; macOS se ha compilado, pero no se ha probado su funcionamiento en un Mac. La reproducción y las ventanas necesitan más pruebas en ambos sistemas.
 
-**Actualización de Android:** los APK 0.13 y 0.14 están firmados con la misma clave. Si se procede de una versión anterior con la firma de prueba, puede ser necesario desinstalarla, lo que puede borrar sus ajustes y playlists. Android o el fabricante pueden mostrar avisos al instalar aplicaciones de fuera de una tienda.
+**Actualización de Android:** los APK 0.13, 0.14 y 0.15 están firmados con la misma clave. Si se procede de una versión anterior con la firma de prueba, puede ser necesario desinstalarla, lo que puede borrar sus ajustes y playlists. Android o el fabricante pueden mostrar avisos al instalar aplicaciones de fuera de una tienda.
 
 ## Funciones
 
