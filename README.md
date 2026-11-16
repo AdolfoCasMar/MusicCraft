@@ -32,6 +32,7 @@ Las versiones de Linux y macOS todavía no son equivalentes a la de Windows: el 
 - En Android, controles multimedia y reproducción en segundo plano; el comportamiento puede variar según el teléfono.
 - Visualizador de frecuencias en Android para archivos locales y fuentes online compatibles.
 - Pausa durante llamadas telefónicas en Android: se ha probado con una llamada simulada y música local; falta probarla en teléfonos reales y con fuentes online.
+- En las versiones recientes de Android y Windows, comprobación de versiones publicadas en GitHub y acceso a la página de descargas; la instalación es manual.
 
 ## Imágenes
 
@@ -59,6 +60,8 @@ cargo test
 ```
 
 La clave privada de firma de Android no se incluye en el repositorio. Los vídeos online pueden solicitar cookies o interacción; las playlists largas pueden importarse parcialmente y el ecualizador depende de la compatibilidad de la fuente.
+
+Para que las aplicaciones detecten una actualización, publica una versión de GitHub con una etiqueta numérica específica por plataforma (`android-v0.15`, `windows-v0.8.4`, `linux-v0.8.4` o `macos-v0.8.4`) y adjunta el archivo correspondiente (`.apk`, `.exe`, `.tar.gz` o `.zip`). Se incluyen versiones preliminares y se ignoran borradores. Modificar el código sin publicar un lanzamiento no activa el aviso. La consulta examina hasta los 100 lanzamientos más recientes; las versiones de Linux y macOS existentes se distribuyen actualmente como archivos alpha y no como lanzamientos con esa etiqueta, por lo que no se detectarán hasta publicar una versión compatible. La funcionalidad de iOS aún está pendiente.
 
 ## Licencias
 

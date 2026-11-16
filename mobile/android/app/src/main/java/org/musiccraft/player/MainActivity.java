@@ -74,6 +74,26 @@ public class MainActivity extends Activity {
     }
 
     private final class PlayerBridge {
+        @JavascriptInterface public void checkUpdate(boolean manual) {
+            new Thread(() -> {
+                String status, version="";
+                try {
+                    String installed=getPackageManager().getPackageInfo(getPackageName(),0).versionName;
+                    java.util.regex.Matcher m=java.util.regex.Pattern.compile("^(\\d+)\\.(\\d+)(?:\\.(\\d+))?.*$").matcher(installed);
+                    if(!m.matches())throw new IllegalStateException("Versión instalada desconocida");
+                    int[] current={Integer.parseInt(m.group(1)),Integer.parseInt(m.group(2)),m.group(3)==null?0:Integer.parseInt(m.group(3))};
+                    String available=UpdateChecker.newerRelease(UpdateChecker.fetch(),current);
+                    if(available==null)status="unavailable";
+                    else if(available.isEmpty())status="current";
+                    else {status="available";version=available;}
+                } catch(Exception e) { status="error"; }
+                final String result=status, latest=version;
+                handler.post(() -> {if(!destroyed)player.evaluateJavascript("window.musiccraftUpdateResult&&window.musiccraftUpdateResult("+JSONObject.quote(result)+","+JSONObject.quote(latest)+","+manual+")",null);});
+            },"musiccraft-update-check").start();
+        }
+        @JavascriptInterface public void openUpdates() {
+            handler.post(() -> {try {startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse(UpdateChecker.RELEASES_PAGE)));}catch(Exception ignored){}});
+        }
         @JavascriptInterface public void beginPlayback() {
             handler.post(() -> {
                 if (!PlaybackService.running()) {

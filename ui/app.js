@@ -49,7 +49,7 @@
   $('eq-reset').onclick=()=>send('eq_preset',{value:'flat'});
   $('preset').onchange=event=>send('eq_preset',{value:event.target.value});
   window.initializeBraveAmpLibrary(panel,$,send,state);
-  let titleValue='';
+  let titleValue='', updateNote='', updateAvailable=false;
   function title(text){
     text=cleanTitle(text || 'MUSICCRAFT'); if(text===titleValue) return; titleValue=text;
     $('title-text').textContent=text; $('title').title=text; $('title').setAttribute('aria-label',text); requestAnimationFrame(measureTitle);
@@ -98,7 +98,7 @@
   }
   function render(){
     title(state.title);$('time').textContent=clock(state.time);$('status').textContent=state.status || (state.playing?'REPRODUCIENDO':'EN PAUSA');
-    $('notice').textContent=state.notice || 'Preparado para reproducir música.';document.body.classList.toggle('playing',!!state.playing);
+    $('notice').textContent=updateNote || state.notice || 'Preparado para reproducir música.';document.body.classList.toggle('playing',!!state.playing);
     for(const id of ['prev','play','pause','stop','next','volume','shuffle','repeat']) $(id).disabled=!state.capabilities.playback;
     $('seek').disabled=!state.capabilities.playback || !state.duration;
     if(document.activeElement!==$('seek')){$('seek').max=Math.max(1,Number(state.duration)||0);$('seek').value=Number(state.time)||0;}
@@ -121,6 +121,27 @@
     if(!Array.isArray(state.eq.bands) || state.eq.bands.length!==9)state.eq.bands=Array(9).fill(0);
     render();
   };
+  if(panel==='player'){
+    const btn=$('check-updates');let running=false;
+    const say=text=>{updateNote=text;render();setTimeout(()=>{if(updateNote===text){updateNote='';render()}},12000)};
+    const compare=(a,b)=>{for(let i=0;i<3;i++){let d=(a[i]||0)-(b[i]||0);if(d)return d}return 0};
+    async function check(manual){
+      if(running)return;running=true;if(manual)say('Consultando GitHub…');
+      const os=window.MUSICCRAFT_PLATFORM||'', version=String(window.MUSICCRAFT_VERSION||'').split('.').map(Number);
+      const allowed={windows:['windows','exe'],linux:['linux','tar.gz'],macos:['macos','zip']}[os];
+      if(!allowed||version.length<2||version.some(n=>!Number.isInteger(n))){if(manual)say('No se conoce la versión instalada.');running=false;return}
+      try{
+        const ctl=new AbortController(),timer=setTimeout(()=>ctl.abort(),10000);let response;
+        try{response=await fetch('https://api.github.com/repos/AdolfoCasMar/MusicCraft/releases?per_page=100',{headers:{Accept:'application/vnd.github+json'},signal:ctl.signal})}finally{clearTimeout(timer)}
+        if(!response.ok)throw Error('GitHub no disponible');const data=await response.json();if(!Array.isArray(data))throw Error('Respuesta no válida');let found=false,best=null;
+        for(const rel of data){const match=String(rel.tag_name||'').match(new RegExp('^'+allowed[0]+'-v(\\d+)\\.(\\d+)(?:\\.(\\d+))?$','i'));if(rel.draft||!match||!Array.isArray(rel.assets)||!rel.assets.some(x=>String(x.name||'').toLowerCase().endsWith('.'+allowed[1])))continue;found=true;const n=[+match[1],+match[2],+(match[3]||0)];if(compare(n,version)>0&&(!best||compare(n,best)>0))best=n}
+        updateAvailable=!!best;btn.textContent=best?'NUEVA':'↑';btn.title=best?'Abrir descarga disponible':'Buscar actualizaciones';
+        if(best)say('Nueva versión '+best.join('.')+' · pulsa NUEVA');else if(manual)say(found?'Ya tienes la versión más reciente.':'No hay versiones publicadas para este sistema.');
+      }catch(_){if(manual)say('No se pudo consultar GitHub.');}finally{running=false}
+    }
+    btn.onclick=()=>{if(updateAvailable)send('open_updates');else check(true)};
+    setTimeout(()=>check(false),5000);
+  }
   render();
   send('ui_ready',{panel});
 })();

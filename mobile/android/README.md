@@ -14,6 +14,8 @@ La versión 0.7 incorpora un visualizador de frecuencias reales para archivos lo
 
 La versión 0.13 puede pausar la música al detectar una llamada telefónica. Para ello solicita el permiso de estado del teléfono; no solicita el historial ni los números. Se ha comprobado con un archivo local y una llamada simulada; hay que probarlo en dispositivos reales y con contenido online. La reproducción no se reanuda automáticamente tras la llamada.
 
+La versión 0.14 consulta los lanzamientos públicos de GitHub al arrancar y permite comprobarlos manualmente. Solo avisa de nuevas versiones Android y abre la página de descargas; no descarga ni instala actualizaciones. La comprobación necesita conexión a Internet y puede fallar si GitHub no está disponible.
+
 El prototipo usa Java para la ventana y JavaScript/Web Audio para la interfaz y audio; el filtrado usa Rust. El APK publicado está firmado con la clave privada del proyecto; esa clave y su contraseña no se distribuyen en el repositorio. Si se actualiza desde una versión anterior firmada con otra clave, puede ser necesario desinstalarla y perder los datos de la aplicación.
 
 Requiere Android 8.0 o posterior con procesador ARM de 64 bits o x86-64. La selección de archivos utiliza el selector del sistema; no pide acceso general a los archivos.

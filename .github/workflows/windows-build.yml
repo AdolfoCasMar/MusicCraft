@@ -27,10 +27,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if (gh release view windows-v0.8.2 2>$null) {
+          if (gh release view windows-v0.8.3 2>$null) {
             Write-Host 'Release already exists; leaving its files unchanged.'
           } else {
-            Copy-Item target/release/musiccraft.exe MusicCraft-Windows-0.8.2.exe
-            gh release create windows-v0.8.2 MusicCraft-Windows-0.8.2.exe --target "$env:GITHUB_SHA" --prerelease --title 'MusicCraft Windows 0.8.2 (preview)' --notes 'Experimental Windows x64 build. The classic panels and docking are retained. The interface now uses neutral labels for online playback. Requires Microsoft Edge WebView2 Runtime. Online playback and filtering depend on the source.'
+            Copy-Item target/release/musiccraft.exe MusicCraft-Windows-0.8.3.exe
+            gh release create windows-v0.8.3 MusicCraft-Windows-0.8.3.exe --target "$env:GITHUB_SHA" --prerelease --title 'MusicCraft Windows 0.8.3 (preview)' --notes 'Experimental Windows x64 build. The classic panels and docking are retained. Includes GitHub update checks for newer Windows releases. Requires Microsoft Edge WebView2 Runtime. Online playback and filtering depend on the source.'
             if ($LASTEXITCODE -ne 0) { throw 'Could not publish Windows release.' }
           }
+

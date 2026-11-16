@@ -108,8 +108,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let view = WebViewBuilder::new_with_web_context(&mut web_context)
             .with_html(&html)
             .with_initialization_script(format!(
-                "window.BRAVEAMP_PANEL={};",
-                serde_json::to_string(name)?
+                "window.BRAVEAMP_PANEL={};window.MUSICCRAFT_PLATFORM={};window.MUSICCRAFT_VERSION={};",
+                serde_json::to_string(name)?,
+                serde_json::to_string(std::env::consts::OS)?,
+                serde_json::to_string(env!("CARGO_PKG_VERSION"))?
             ))
             .with_ipc_handler(move |r| {
                 if let Ok(v) = serde_json::from_str::<Value>(r.body()) {
@@ -322,6 +324,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cmd=msg["command"].as_str().unwrap_or("");let index=msg["index"].as_u64().unwrap_or(u64::MAX) as usize;let val=msg["value"].as_f64().unwrap_or(0.0);
     match cmd {
      "ui_ready"=>{},
+     "open_updates"=>{
+      let url="https://github.com/AdolfoCasMar/MusicCraft/releases";
+      #[cfg(target_os="windows")]
+      let _=std::process::Command::new("rundll32.exe").args(["url.dll,FileProtocolHandler",url]).spawn();
+      #[cfg(target_os="macos")]
+      let _=std::process::Command::new("open").arg(url).spawn();
+      #[cfg(target_os="linux")]
+      let _=std::process::Command::new("xdg-open").arg(url).spawn();
+     },
      "drag_window"=>{active_drag=Some(panel.clone());pending_arrange=Some((std::time::Instant::now()+std::time::Duration::from_millis(220),panel.clone()));if let Some(p)=panels.get(&panel){let _=p.window.drag_window();}},
      #[cfg(debug_assertions)]
      "debug_scale"=>{let factor=msg["value"].as_f64().unwrap_or(1.0).clamp(0.55,2.5);let snapshot=panels.iter().filter_map(|(n,p)|visible_rect(&p.window).map(|r|(n.clone(),r))).collect();active_resize=Some(("player".to_string(),"se".to_string(),snapshot,ui_scale));pending_arrange=Some((std::time::Instant::now()+std::time::Duration::from_millis(220),"player".to_string()));let (w,h)=base_size("player");panels["player"].window.set_inner_size(LogicalSize::new(w*factor,h*factor));},
