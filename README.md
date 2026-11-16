@@ -13,7 +13,7 @@ MusicCraft es un reproductor gratuito y experimental inspirado en Winamp. Reúne
 | Plataforma | Estado | Descarga |
 | --- | --- | --- |
 | Android | Versión experimental firmada; Android 8 o superior, ARM64 o x86-64. | [Descargar APK 0.15](https://github.com/AdolfoCasMar/MusicCraft/releases/download/android-v0.15/MusicCraft-Android-0.15.apk) |
-| Windows | Versión experimental para Windows de 64 bits; necesita Microsoft Edge WebView2 Runtime. | [Descargar versión 0.8.3](https://github.com/AdolfoCasMar/MusicCraft/releases/download/windows-v0.8.3/MusicCraft-Windows-0.8.3.exe) |
+| Windows | Versión experimental para Windows de 64 bits; necesita Microsoft Edge WebView2 Runtime. | [Descargar versión 0.8.4](https://github.com/AdolfoCasMar/MusicCraft/releases/download/windows-v0.8.4/MusicCraft-Windows-0.8.4.exe) |
 | iPhone | Prototipo inicial, sin búsqueda online ni filtrado; requiere firma para instalarlo. | [Consultar el proyecto iOS](mobile/ios/README.md) |
 | Linux | Prueba temprana para x86-64; requiere GTK 3, WebKitGTK 4.1 y X11 o XWayland. | [Descargar Linux alpha 0.8.4](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-Linux-alpha-0.8.4-x64.tar.gz) |
 | macOS | Prueba temprana para Apple Silicon; aplicación sin firmar. | [Descargar macOS alpha 0.8.4](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-macOS-alpha-0.8.4-arm64.zip) |
