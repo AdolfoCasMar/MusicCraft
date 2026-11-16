@@ -1,0 +1,28 @@
+name: Publish Windows 0.8.4
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/publish-windows-084.yml']
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve tested build
+        run: |
+          gh run download 43831683083 --name MusicCraft-Windows-x64 --dir build
+          cp build/musiccraft.exe MusicCraft-Windows-0.8.4.exe
+      - name: Publish preview
+        run: |
+          if gh release view windows-v0.8.4 >/dev/null 2>&1; then
+            echo 'Release already exists.'
+          else
+            gh release create windows-v0.8.4 MusicCraft-Windows-0.8.4.exe --target "$GITHUB_SHA" --prerelease --title 'MusicCraft Windows 0.8.4 (preview)' --notes 'Experimental Windows x64 build. Includes author and contact in the About panel. Requires Microsoft Edge WebView2 Runtime. Online playback and filtering depend on the source.'
+          fi
