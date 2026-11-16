@@ -74,6 +74,12 @@ public class MainActivity extends Activity {
     }
 
     private final class PlayerBridge {
+        @JavascriptInterface public String appVersion() {
+            try {return getPackageManager().getPackageInfo(getPackageName(),0).versionName;}catch(Exception e){return "—";}
+        }
+        @JavascriptInterface public void openAuthor() {
+            handler.post(() -> {try {startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://github.com/AdolfoCasMar")));}catch(Exception ignored){}});
+        }
         @JavascriptInterface public void checkUpdate(boolean manual) {
             new Thread(() -> {
                 String status, version="";

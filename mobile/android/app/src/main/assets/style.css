@@ -13,3 +13,5 @@ main{padding:8px 7px 12px}.panel{border-radius:8px;overflow:hidden}.panel header
 html,body{scrollbar-width:none}html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 
 .update-row{display:flex;align-items:center;gap:6px;margin:6px 2px 1px}.update-row button{font-size:10px;min-height:27px}.update-row span{flex:1;color:#91dc7c;font:11px Arial;line-height:1.2}
+
+.about-overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:18px;background:#000b}.about-card{width:min(100%,390px);border:2px solid #8993a4;border-radius:9px;padding:8px;background:linear-gradient(135deg,#30334c,#151623);box-shadow:0 10px 32px #000;color:#e4e7dd}.about-card header b{text-align:left}.about-card p{margin:16px 8px;color:#9af491}.about-card button{min-height:36px}

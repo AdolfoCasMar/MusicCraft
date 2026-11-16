@@ -5,3 +5,5 @@
 .trackbox small #source-label{float:none}
 
 .search-modes{display:flex;gap:16px;padding:8px 2px;color:#85ed71;font:11px monospace}.library-row{display:flex;gap:4px;margin-top:5px}.library-row input,.library-row select{flex:1;min-width:0;background:#050805;color:#40fa4d;border:2px inset #6c7784;padding:7px}#search-results li button:first-child{flex:1;min-width:0}#search-results li button.result-add{flex:none;width:auto;background:linear-gradient(#f2f5ed,#a9b6be);color:#20263b;border:2px outset #d6dfdc;font:700 10px Arial}#search-results li{gap:4px}
+
+.about-overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:18px;background:#000b}.about-card{width:min(100%,390px);border:2px solid #8993a4;border-radius:9px;padding:8px;background:linear-gradient(135deg,#30334c,#151623);box-shadow:0 10px 32px #000;color:#e4e7dd}.about-card header b{text-align:left}.about-card p{margin:16px 8px;color:#9af491}.about-card button{min-height:36px}

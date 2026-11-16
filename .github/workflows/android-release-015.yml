@@ -1,0 +1,23 @@
+name: Publish Android 0.15
+on:
+  push:
+    branches: [main]
+    paths: ['downloads/MusicCraft-Android-0.15.apk', '.github/workflows/android-release-015.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Publish signed Android preview
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view android-v0.15 >/dev/null 2>&1; then
+            echo 'Release already exists; leaving its files unchanged.'
+          else
+            gh release create android-v0.15 downloads/MusicCraft-Android-0.15.apk --target "$GITHUB_SHA" --prerelease --title 'MusicCraft Android 0.15 (preview)' --notes 'Signed Android preview with an About panel showing author and contact. MusicCraft checks published Android releases and opens GitHub for downloads; it does not install updates automatically. Calls require phone-state permission. Real-device and online playback tests remain necessary; filtering may not block all ads.'
+          fi
+

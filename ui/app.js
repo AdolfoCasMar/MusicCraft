@@ -121,6 +121,10 @@
     if(!Array.isArray(state.eq.bands) || state.eq.bands.length!==9)state.eq.bands=Array(9).fill(0);
     render();
   };
+  $('about-open').onclick=()=>{$('about-version').textContent=window.MUSICCRAFT_VERSION||'—';$('about-dialog').hidden=false;$('about-close').focus()};
+  $('about-close').onclick=()=>{$('about-dialog').hidden=true;$('about-open').focus()};
+  $('about-profile').onclick=()=>send('open_author');
+  $('about-dialog').onclick=e=>{if(e.target===$('about-dialog'))$('about-close').click()};
   if(panel==='player'){
     const btn=$('check-updates');let running=false;
     const say=text=>{updateNote=text;render();setTimeout(()=>{if(updateNote===text){updateNote='';render()}},12000)};

@@ -63,6 +63,10 @@ La clave privada de firma de Android no se incluye en el repositorio. Los vídeo
 
 Para que las aplicaciones detecten una actualización, publica una versión de GitHub con una etiqueta numérica específica por plataforma (`android-v0.15`, `windows-v0.8.4`, `linux-v0.8.4` o `macos-v0.8.4`) y adjunta el archivo correspondiente (`.apk`, `.exe`, `.tar.gz` o `.zip`). Se incluyen versiones preliminares y se ignoran borradores. Modificar el código sin publicar un lanzamiento no activa el aviso. La consulta examina hasta los 100 lanzamientos más recientes; las versiones de Linux y macOS existentes se distribuyen actualmente como archivos alpha y no como lanzamientos con esa etiqueta, por lo que no se detectarán hasta publicar una versión compatible. La funcionalidad de iOS aún está pendiente.
 
+## Autor y contacto
+
+MusicCraft está desarrollado por **Adolfo CasMar**. Puedes encontrar el proyecto y contactar a través de su [perfil de GitHub](https://github.com/AdolfoCasMar).
+
 ## Licencias
 
 El código propio se distribuye bajo **MIT o Apache 2.0**, a tu elección: [LICENSE-MIT](LICENSE-MIT) y [LICENSE-APACHE](LICENSE-APACHE). Los componentes y listas de terceros tienen sus propias condiciones; consulta [LICENCIA-ADBLOCK.txt](LICENCIA-ADBLOCK.txt) y los encabezados de las listas incluidas.

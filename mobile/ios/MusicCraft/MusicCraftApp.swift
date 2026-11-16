@@ -2,6 +2,7 @@ import SwiftUI
 import WebKit
 import AVFoundation
 import MediaPlayer
+import UIKit
 
 @main
 struct MusicCraftApp: App {
@@ -17,7 +18,10 @@ struct PlayerView: UIViewRepresentable {
         config.mediaTypesRequiringUserActionForPlayback = []
         let controller = config.userContentController
         controller.add(context.coordinator, name: "musiccraft")
-        controller.addUserScript(WKUserScript(source: Coordinator.bridge, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "—"
+        let versionData = try? JSONSerialization.data(withJSONObject: [version])
+        let versionJSON = versionData.flatMap { String(data: $0, encoding: .utf8) } ?? "[\"—\"]"
+        controller.addUserScript(WKUserScript(source: "window.musiccraftAppVersion=" + versionJSON + "[0];" + Coordinator.bridge, injectionTime: .atDocumentStart, forMainFrameOnly: true))
         let web = WKWebView(frame: .zero, configuration: config)
         web.isOpaque = false
         web.backgroundColor = UIColor(red: 0.08, green: 0.09, blue: 0.14, alpha: 1)
@@ -43,6 +47,7 @@ struct PlayerView: UIViewRepresentable {
         (() => {
           const send=(name,...args)=>window.webkit.messageHandlers.musiccraft.postMessage({name,args});
           window.MusicCraftAndroid={
+            appVersion:()=>window.musiccraftAppVersion, openAuthor:()=>send('author'),
             beginPlayback:()=>send('begin'), stopPlaybackService:()=>send('stop'),
             reportMedia:(...a)=>send('report',...a),
             search:()=>{document.getElementById('search-status').textContent='La búsqueda online todavía no está disponible en esta prueba para iPhone.';},
@@ -54,6 +59,8 @@ struct PlayerView: UIViewRepresentable {
             guard let body = message.body as? [String: Any], let name = body["name"] as? String else { return }
             let args = body["args"] as? [Any] ?? []
             switch name {
+            case "author":
+                if let url = URL(string: "https://github.com/AdolfoCasMar") { UIApplication.shared.open(url) }
             case "begin":
                 do {
                     try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
