@@ -12,17 +12,17 @@ MusicCraft es un reproductor gratuito y experimental inspirado en Winamp. Reúne
 
 | Plataforma | Estado | Descarga |
 | --- | --- | --- |
-| Android | Versión experimental firmada; Android 8 o superior, ARM64 o x86-64. | [Descargar APK 0.13](https://github.com/AdolfoCasMar/MusicCraft/releases/download/android-v0.13/MusicCraft-Android-0.13.apk) |
-| Windows | Versión experimental para Windows de 64 bits; necesita Microsoft Edge WebView2 Runtime. | [Descargar versión 0.8.2](https://github.com/AdolfoCasMar/MusicCraft/releases/download/windows-v0.8.2/MusicCraft-Windows-0.8.2.exe) |
+| Android | Versión experimental firmada; Android 8 o superior, ARM64 o x86-64. | [Descargar APK 0.14](https://github.com/AdolfoCasMar/MusicCraft/releases/download/android-v0.14/MusicCraft-Android-0.14.apk) |
+| Windows | Versión experimental para Windows de 64 bits; necesita Microsoft Edge WebView2 Runtime. | [Descargar versión 0.8.3](https://github.com/AdolfoCasMar/MusicCraft/releases/download/windows-v0.8.3/MusicCraft-Windows-0.8.3.exe) |
 | iPhone | Prototipo inicial, sin búsqueda online ni filtrado; requiere firma para instalarlo. | [Consultar el proyecto iOS](mobile/ios/README.md) |
-| Linux | Prueba temprana para x86-64; requiere GTK 3, WebKitGTK 4.1 y X11 o XWayland. | [Descargar Linux alpha](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-Linux-alpha-x64.tar.gz) |
-| macOS | Prueba temprana para Apple Silicon; aplicación sin firmar. | [Descargar macOS alpha](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-macOS-alpha-arm64.zip) |
+| Linux | Prueba temprana para x86-64; requiere GTK 3, WebKitGTK 4.1 y X11 o XWayland. | [Descargar Linux alpha 0.8.3](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-Linux-alpha-0.8.3-x64.tar.gz) |
+| macOS | Prueba temprana para Apple Silicon; aplicación sin firmar. | [Descargar macOS alpha 0.8.3](https://github.com/AdolfoCasMar/MusicCraft/raw/refs/heads/main/downloads/MusicCraft-macOS-alpha-0.8.3-arm64.zip) |
 
 [Ver todas las versiones](https://github.com/AdolfoCasMar/MusicCraft/releases).
 
 Las versiones de Linux y macOS todavía no son equivalentes a la de Windows: el filtrado de peticiones de red no está integrado y puede aparecer publicidad. Linux se ha comprobado arrancando en un entorno virtual; macOS se ha compilado, pero no se ha probado su funcionamiento en un Mac. La reproducción y las ventanas necesitan más pruebas en ambos sistemas.
 
-**Actualización de Android:** el APK 0.13 tiene una firma distinta de las versiones de prueba anteriores. Puede ser necesario desinstalar la anterior, lo que puede borrar sus ajustes y playlists. Android o el fabricante pueden mostrar avisos al instalar aplicaciones de fuera de una tienda.
+**Actualización de Android:** los APK 0.13 y 0.14 están firmados con la misma clave. Si se procede de una versión anterior con la firma de prueba, puede ser necesario desinstalarla, lo que puede borrar sus ajustes y playlists. Android o el fabricante pueden mostrar avisos al instalar aplicaciones de fuera de una tienda.
 
 ## Funciones
 
@@ -32,7 +32,7 @@ Las versiones de Linux y macOS todavía no son equivalentes a la de Windows: el 
 - En Android, controles multimedia y reproducción en segundo plano; el comportamiento puede variar según el teléfono.
 - Visualizador de frecuencias en Android para archivos locales y fuentes online compatibles.
 - Pausa durante llamadas telefónicas en Android: se ha probado con una llamada simulada y música local; falta probarla en teléfonos reales y con fuentes online.
-- En las versiones recientes de Android y Windows, comprobación de versiones publicadas en GitHub y acceso a la página de descargas; la instalación es manual.
+- Comprobación de versiones publicadas en GitHub y acceso a la página de descargas; la instalación es manual. En las versiones alpha de Linux y macOS la detección necesita que se publiquen lanzamientos compatibles.
 
 ## Imágenes
 
