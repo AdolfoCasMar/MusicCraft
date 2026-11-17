@@ -65,7 +65,7 @@ Para que las aplicaciones detecten una actualización, publica una versión de G
 
 ## Autor y contacto
 
-MusicCraft está desarrollado por **Adolfo CasMar**. Puedes encontrar el proyecto y contactar a través de su [perfil de GitHub](https://github.com/AdolfoCasMar).
+MusicCraft está desarrollado por **Adolfo Castaño Martín** (usuario **AdolfoCasMar**), profesor universitario, artista y desarrollador de software. Puedes encontrar el proyecto y contactar a través de su [perfil de GitHub](https://github.com/AdolfoCasMar).
 
 ## Licencias
 
